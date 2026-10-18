@@ -6,55 +6,91 @@
   <title>Автомийка на Салютній — Онлайн-запис</title>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; max-width: 550px; margin: 0 auto; padding: 20px 15px; color: #2c3e50; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; max-width: 550px; margin: 0 auto; padding: 20px 15px; color: #2c3e50; overflow-x: hidden; }
     
-    /* Шапка с логотипом */
-    .header-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; margin-top: 10px; }
+    /* Анимация 1: Плавное появление снизу */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Анимация 2: Пульсация кнопки */
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+    }
+
+    /* Анимация 3: Появление элемента корзины */
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Анимация 4: Пружинистое появление (для успеха) */
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: scale(0.5); }
+      60% { opacity: 1; transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Применяем анимации к элементам */
+    .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; margin-top: 10px; }
+    .form-group { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+
     .header-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     .header-text { text-align: left; }
     .header-text h1 { margin: 0; font-size: 22px; color: #1a252f; line-height: 1.1; }
     .header-text p { margin: 4px 0 0 0; font-size: 13px; color: #718096; font-weight: 600; text-transform: lowercase; letter-spacing: 0.5px; }
 
-    .subtitle-center { text-align: center; color: #718096; margin-bottom: 25px; font-size: 14px; }
-    h2 { font-size: 18px; color: #34495e; margin-top: 25px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; }
+    .subtitle-center { text-align: center; color: #718096; margin-bottom: 25px; font-size: 14px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.2s; }
+    h2 { font-size: 18px; color: #34495e; margin-top: 25px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
     
     /* Поля ввода */
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; font-size: 14px; }
     .form-group label span { color: #e53e3e; } 
     
-    input[type="text"], input[type="tel"], input[type="date"] { 
+    input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 14px 16px; border: 2px solid #cbd5e0; border-radius: 10px; font-size: 16px; 
-      background: #ffffff; color: #2c3e50; outline: none; font-family: inherit; transition: border-color 0.2s; 
+      background: #ffffff; color: #2c3e50; outline: none; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; 
       -webkit-appearance: none; appearance: none;
     }
     input:focus { border-color: #eab308; box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15); }
 
     /* Блок калькулятора */
-    .calc-trigger-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; border-left: 4px solid #eab308; }
+    .calc-trigger-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; border-left: 4px solid #eab308; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.4s;}
     .calc-trigger-box p { margin: 0 0 15px; font-size: 14px; color: #4a5568; }
     .btn-calc { background: #fefce8; color: #a16207; border: 2px dashed #eab308; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; font-size: 15px; }
     .btn-calc:hover { background: #eab308; color: white; border-style: solid; }
     .selected-services-summary { margin-top: 15px; font-size: 14px; display: none; }
-    .selected-services-summary.active { display: block; }
+    .selected-services-summary.active { display: block; animation: slideInRight 0.3s ease-out; }
     .price-main { font-size: 24px; font-weight: bold; color: #1a252f; margin-top: 5px; }
 
     /* Главная кнопка */
-    .main-button { display: block; width: 100%; padding: 18px; margin-top: 20px; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3); transition: all 0.2s ease; }
-    .main-button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4); }
-    .message-error { color: #e53e3e; font-weight: 500; margin-top: 10px; text-align: center;}
-    .message-success { color: #38a169; font-weight: bold; margin-top: 10px; text-align: center;}
+    .main-button { 
+      display: block; width: 100%; padding: 18px; margin-top: 20px; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; 
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3); transition: all 0.2s ease; 
+      animation: pulseGlow 2.5s infinite, fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0s, 0.5s;
+    }
+    .main-button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4); }
+    .main-button:active { transform: translateY(0) scale(0.98); }
+
+    .message-error { color: #e53e3e; font-weight: 500; margin-top: 10px; text-align: center; }
+    .message-success { color: #38a169; font-weight: bold; margin-top: 10px; text-align: center; animation: bounceIn 0.6s ease-out; }
 
     /* Модальное окно калькулятора */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; }
     .modal-overlay.active { display: flex; opacity: 1; }
-    .modal-content { background: #f0f4f8; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 20px; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; position: relative; }
+    .modal-content { background: #f0f4f8; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 20px; overflow-y: auto; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
     .modal-overlay.active .modal-content { transform: translateY(0); }
     
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; position: sticky; top: -20px; background: #f0f4f8; padding: 10px 0; z-index: 10; }
     .modal-title { font-size: 20px; font-weight: bold; color: #1a252f; margin: 0; }
-    .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #a0aec0; padding: 0; line-height: 1; }
-    .close-btn:hover { color: #e53e3e; }
+    .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #a0aec0; padding: 0; line-height: 1; transition: color 0.2s, transform 0.2s; }
+    .close-btn:hover { color: #e53e3e; transform: rotate(90deg); }
 
     .modal-class-selector { margin-bottom: 15px; background: white; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e0; }
     .modal-class-selector label { font-weight: bold; font-size: 13px; color: #4a5568; display: block; margin-bottom: 5px; }
@@ -63,22 +99,28 @@
 
     .category-tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
     .cat-btn { padding: 8px 14px; border: none; background: #e2e8f0; border-radius: 20px; cursor: pointer; font-size: 13px; color: #4a5568; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
-    .cat-btn.active { background: #eab308; color: white; }
+    .cat-btn.active { background: #eab308; color: white; transform: scale(1.05); }
 
-    .service-card { background: white; border: 2px solid #cbd5e0; border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .service-card.active { border-color: #eab308; background: #fefce8; }
+    /* Анимация карточек */
+    .service-card { background: white; border: 2px solid #cbd5e0; border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .service-card:hover { border-color: #a0aec0; transform: scale(1.01); }
+    .service-card:active { transform: scale(0.97); }
+    .service-card.active { border-color: #eab308; background: #fefce8; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.15); }
+    
     .service-title { font-weight: 600; font-size: 14px; color: #1a252f; }
     .service-price { font-weight: bold; color: #a16207; font-size: 15px; }
     
-    .qty-controls { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; padding: 2px; }
-    .qty-btn { background: #e2e8f0; border: none; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; color: #4a5568; }
+    .qty-controls { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; padding: 2px; animation: bounceIn 0.3s ease-out;}
+    .qty-btn { background: #e2e8f0; border: none; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; color: #4a5568; transition: background 0.1s; }
+    .qty-btn:active { background: #cbd5e0; }
     .qty-val { font-weight: bold; min-width: 15px; text-align: center; font-size: 14px; }
 
     .cart-block { margin-top: 15px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #eab308; }
     .cart-title { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #1a252f; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px; animation: slideInRight 0.3s ease-out; }
     .cart-item:last-child { border-bottom: none; }
-    .cart-item-remove { cursor: pointer; color: #e53e3e; font-weight: bold; margin-left: 8px; }
+    .cart-item-remove { cursor: pointer; color: #e53e3e; font-weight: bold; margin-left: 8px; transition: transform 0.2s; }
+    .cart-item-remove:hover { transform: scale(1.3); }
     .empty-cart { color: #a0aec0; font-size: 13px; font-style: italic; }
     
     .modal-total { font-size: 22px; font-weight: bold; color: #1a252f; text-align: right; margin-top: 15px; }
@@ -86,7 +128,6 @@
 </head>
 <body>
 
-  <!-- Шапка с логотипом -->
   <div class="header-container">
     <img src="logo.png" alt="SALYTNA Logo" class="header-logo">
     <div class="header-text">
@@ -97,7 +138,6 @@
 
   <p class="subtitle-center">Онлайн-запис на професійний догляд за авто</p>
 
-  <!-- 1. ВВОД АВТО -->
   <h2>1. Ваш автомобіль <span style="color:#e53e3e">*</span></h2>
   <div class="form-group">
     <label for="car-model">Вкажіть марку та модель</label>
@@ -107,18 +147,17 @@
     </datalist>
   </div>
 
-  <!-- 2. ДАТА И ВРЕМЯ -->
   <h2>2. Бажана дата та час <span style="color:#e53e3e">*</span></h2>
   <div class="form-group">
     <label for="date-input">Дата візиту</label>
     <input type="date" id="date-input" required>
   </div>
   <div class="form-group">
-    <label for="time-input">Бажаний час (напишіть, напр. 14:30)</label>
-   <input type="time" id="time-input" required>
+    <label for="time-input">Бажаний час</label>
+    <!-- ТУТ КРУТИЛКА -->
+    <input type="time" id="time-input" required>
   </div>
 
-  <!-- 3. КОНТАКТЫ -->
   <h2>3. Ваші контакти <span style="color:#e53e3e">*</span></h2>
   <div class="form-group">
     <input id="name" placeholder="Ваше ім'я" type="text" required>
@@ -127,7 +166,6 @@
     <input id="contact" placeholder="Телефон або Telegram" type="tel" required>
   </div>
 
-  <!-- КАЛЬКУЛЯТОР -->
   <div class="calc-trigger-box">
     <p>Бажаєте дізнатися вартість послуг заздалегідь?</p>
     <button class="btn-calc" id="open-calc">🧮 Розрахувати вартість (не обов'язково)</button>
@@ -142,7 +180,6 @@
   <button class="main-button" id="submit">Записатися на мийку</button>
   <p class="subtitle-center" id="message" style="margin-top:15px;">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</p>
 
-  <!-- МОДАЛЬНОЕ ОКНО КАЛЬКУЛЯТОРА -->
   <div class="modal-overlay" id="calc-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -182,7 +219,6 @@
   </div>
 
   <script>
-    // ПУТЬ ДЛЯ CLOUDFLARE PAGES
     const API_URL = '/send';
 
     const servicesDB = {
@@ -409,7 +445,7 @@
       const exactModel = carModelInput.value.trim();
       
       if (!dateVal || !timeVal) { 
-        messageElement.textContent = 'Будь ласка, оберіть дату та вкажіть час візиту.'; 
+        messageElement.textContent = 'Будь ласка, оберіть дату та час візиту.'; 
         messageElement.className = 'message-error'; 
         return; 
       }
@@ -456,7 +492,7 @@
         messageElement.className = 'message-error';
       }
     });
- 
+
     renderServices();
   </script>
 </body>
