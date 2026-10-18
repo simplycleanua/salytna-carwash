@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Автомийка на Салютній — Онлайн-запис</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; max-width: 550px; margin: 0 auto; padding: 20px 15px; color: #2c3e50; }
+    
+    /* Шапка с логотипом */
+    .header-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; margin-top: 10px; }
+    .header-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .header-text { text-align: left; }
+    .header-text h1 { margin: 0; font-size: 22px; color: #1a252f; line-height: 1.1; }
+    .header-text p { margin: 4px 0 0 0; font-size: 13px; color: #718096; font-weight: 600; text-transform: lowercase; letter-spacing: 0.5px; }
+
+    .subtitle-center { text-align: center; color: #718096; margin-bottom: 25px; font-size: 14px; }
+    h2 { font-size: 18px; color: #34495e; margin-top: 25px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; }
+    
+    /* Поля ввода */
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; font-size: 14px; }
+    .form-group label span { color: #e53e3e; } 
+    
+    input[type="text"], input[type="tel"], input[type="date"] { 
+      display: block; width: 100%; padding: 14px 16px; border: 2px solid #cbd5e0; border-radius: 10px; font-size: 16px; 
+      background: #ffffff; color: #2c3e50; outline: none; font-family: inherit; transition: border-color 0.2s; 
+      -webkit-appearance: none; appearance: none;
+    }
+    input:focus { border-color: #eab308; box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15); }
+
+    /* Блок калькулятора */
+    .calc-trigger-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; border-left: 4px solid #eab308; }
+    .calc-trigger-box p { margin: 0 0 15px; font-size: 14px; color: #4a5568; }
+    .btn-calc { background: #fefce8; color: #a16207; border: 2px dashed #eab308; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; font-size: 15px; }
+    .btn-calc:hover { background: #eab308; color: white; border-style: solid; }
+    .selected-services-summary { margin-top: 15px; font-size: 14px; display: none; }
+    .selected-services-summary.active { display: block; }
+    .price-main { font-size: 24px; font-weight: bold; color: #1a252f; margin-top: 5px; }
+
+    /* Главная кнопка */
+    .main-button { display: block; width: 100%; padding: 18px; margin-top: 20px; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3); transition: all 0.2s ease; }
+    .main-button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4); }
+    .message-error { color: #e53e3e; font-weight: 500; margin-top: 10px; text-align: center;}
+    .message-success { color: #38a169; font-weight: bold; margin-top: 10px; text-align: center;}
+
+    /* Модальное окно калькулятора */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-content { background: #f0f4f8; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 20px; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; position: relative; }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; position: sticky; top: -20px; background: #f0f4f8; padding: 10px 0; z-index: 10; }
+    .modal-title { font-size: 20px; font-weight: bold; color: #1a252f; margin: 0; }
+    .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #a0aec0; padding: 0; line-height: 1; }
+    .close-btn:hover { color: #e53e3e; }
+
+    .modal-class-selector { margin-bottom: 15px; background: white; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e0; }
+    .modal-class-selector label { font-weight: bold; font-size: 13px; color: #4a5568; display: block; margin-bottom: 5px; }
+    
+    select { display: block; width: 100%; padding: 12px; font-size: 16px; border: 2px solid #cbd5e0; border-radius: 10px; background: white; -webkit-appearance: menulist; appearance: menulist; }
+
+    .category-tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+    .cat-btn { padding: 8px 14px; border: none; background: #e2e8f0; border-radius: 20px; cursor: pointer; font-size: 13px; color: #4a5568; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
+    .cat-btn.active { background: #eab308; color: white; }
+
+    .service-card { background: white; border: 2px solid #cbd5e0; border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .service-card.active { border-color: #eab308; background: #fefce8; }
+    .service-title { font-weight: 600; font-size: 14px; color: #1a252f; }
+    .service-price { font-weight: bold; color: #a16207; font-size: 15px; }
+    
+    .qty-controls { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; padding: 2px; }
+    .qty-btn { background: #e2e8f0; border: none; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; color: #4a5568; }
+    .qty-val { font-weight: bold; min-width: 15px; text-align: center; font-size: 14px; }
+
+    .cart-block { margin-top: 15px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #eab308; }
+    .cart-title { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #1a252f; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px; }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item-remove { cursor: pointer; color: #e53e3e; font-weight: bold; margin-left: 8px; }
+    .empty-cart { color: #a0aec0; font-size: 13px; font-style: italic; }
+    
+    .modal-total { font-size: 22px; font-weight: bold; color: #1a252f; text-align: right; margin-top: 15px; }
+  </style>
+</head>
+<body>
+
+  <!-- Шапка с логотипом -->
+  <div class="header-container">
+    <img src="logo.png" alt="SALYTNA Logo" class="header-logo">
+    <div class="header-text">
+      <h1>Автомийка на Салютній</h1>
+      <p>salytna_carwash</p>
+    </div>
+  </div>
+
+  <p class="subtitle-center">Онлайн-запис на професійний догляд за авто</p>
+
+  <!-- 1. ВВОД АВТО -->
+  <h2>1. Ваш автомобіль <span style="color:#e53e3e">*</span></h2>
+  <div class="form-group">
+    <label for="car-model">Вкажіть марку та модель</label>
+    <input list="car-models-list" id="car-model" placeholder="Напр. Volkswagen Passat" required>
+    <datalist id="car-models-list">
+      <option value="Audi A4"></option><option value="Audi A6"></option><option value="Toyota Camry"></option><option value="Toyota RAV4"></option><option value="Toyota Land Cruiser"></option><option value="VW Passat"></option><option value="VW Tiguan"></option><option value="VW Transporter"></option><option value="BMW 3 Series"></option><option value="BMW X5"></option><option value="Skoda Octavia"></option><option value="Skoda Superb"></option><option value="Nissan Qashqai"></option><option value="Hyundai Tucson"></option><option value="Kia Sportage"></option><option value="Mercedes Vito"></option><option value="Ford Mondeo"></option>
+    </datalist>
+  </div>
+
+  <!-- 2. ДАТА И ВРЕМЯ -->
+  <h2>2. Бажана дата та час <span style="color:#e53e3e">*</span></h2>
+  <div class="form-group">
+    <label for="date-input">Дата візиту</label>
+    <input type="date" id="date-input" required>
+  </div>
+  <div class="form-group">
+    <label for="time-input">Бажаний час (напишіть, напр. 14:30)</label>
+    <input type="text" id="time-input" placeholder="Наприклад: 14:30" required>
+  </div>
+
+  <!-- 3. КОНТАКТЫ -->
+  <h2>3. Ваші контакти <span style="color:#e53e3e">*</span></h2>
+  <div class="form-group">
+    <input id="name" placeholder="Ваше ім'я" type="text" required>
+  </div>
+  <div class="form-group">
+    <input id="contact" placeholder="Телефон або Telegram" type="tel" required>
+  </div>
+
+  <!-- КАЛЬКУЛЯТОР -->
+  <div class="calc-trigger-box">
+    <p>Бажаєте дізнатися вартість послуг заздалегідь?</p>
+    <button class="btn-calc" id="open-calc">🧮 Розрахувати вартість (не обов'язково)</button>
+    
+    <div class="selected-services-summary" id="main-summary">
+      <div style="color:#718096; font-size:12px; margin-bottom:5px;">Попередньо обрано:</div>
+      <div id="main-summary-text" style="font-size:14px; color:#1a252f; margin-bottom:5px;"></div>
+      <div class="price-main" id="main-total">0 грн</div>
+    </div>
+  </div>
+
+  <button class="main-button" id="submit">Записатися на мийку</button>
+  <p class="subtitle-center" id="message" style="margin-top:15px;">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</p>
+
+  <!-- МОДАЛЬНОЕ ОКНО КАЛЬКУЛЯТОРА -->
+  <div class="modal-overlay" id="calc-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Калькулятор послуг</h2>
+        <button class="close-btn" id="close-calc">×</button>
+      </div>
+
+      <div class="modal-class-selector">
+        <label for="modal-car-class">Оберіть клас авто для розрахунку:</label>
+        <select id="modal-car-class">
+          <option value="1">1 Клас (Седан, Купе, Хетчбек)</option>
+          <option value="2">2 Клас (Універсал, Фургон)</option>
+          <option value="3">3 Клас (Кросовер, Джип)</option>
+          <option value="4">4 Клас (Мікроавтобус, Великий Джип)</option>
+        </select>
+      </div>
+
+      <div class="category-tabs" id="categories">
+        <button class="cat-btn active" data-cat="wash">Мийка</button>
+        <button class="cat-btn" data-cat="interior">Інтер'єр</button>
+        <button class="cat-btn" data-cat="exterior">Екстер'єр</button>
+        <button class="cat-btn" data-cat="detailing">Детейлінг</button>
+        <button class="cat-btn" data-cat="polish">Полірування</button>
+      </div>
+
+      <div id="main-services"></div>
+      <div id="extra-services"></div>
+
+      <div class="cart-block">
+        <div class="cart-title">🛒 Ваше замовлення</div>
+        <div id="cart-items" class="empty-cart">Послуги не обрані</div>
+      </div>
+      
+      <div class="modal-total" id="modal-total">Разом: 0 грн</div>
+      <button class="main-button" style="margin-top:15px;" id="apply-calc">Застосувати та закрити</button>
+    </div>
+  </div>
+
+  <script>
+    // ПУТЬ ДЛЯ CLOUDFLARE PAGES
+    const API_URL = '/send';
+
+    const servicesDB = {
+      wash: [
+        { name: "Експрес мийка (без сушки)", prices: ["350", "400", "500", "від 600"], isMain: true },
+        { name: "3-х фазна мийка", prices: ["600", "650", "700", "від 800"], isMain: true },
+        { name: "3-х фазна мийка (бізнес клас)", prices: ["700", "750", "800", "від 800"], isMain: true },
+        { name: "Комплексна мийка", prices: ["від 1200", "від 1300", "від 1400", "від 1500"], isMain: true },
+        { name: "Мийка підкапотного простору", prices: ["від 1000", "від 1000", "від 1200", "від 1300"], isMain: false },
+        { name: "Мийка для мото", prices: ["від 500", "від 500", "від 700", "від 700"], isMain: true }
+      ],
+      interior: [
+        { name: "Комплексна хімчистка салону", prices: ["від 6000", "від 7000", "від 8500", "від 10000"], isMain: true },
+        { name: "Хімчистка стелі", prices: ["від 1500", "від 1700", "від 1700", "від 2000"], isMain: false },
+        { name: "Хімчистка сидінь (од.)", prices: ["від 500", "від 500", "від 500", "від 500"], isMain: false, isUnit: true },
+        { name: "Хімчистка торпедо", prices: ["від 500", "від 500", "від 500", "від 500"], isMain: false },
+        { name: "Хімчистка підлоги", prices: ["від 1000", "від 1000", "від 1200", "від 1200"], isMain: false },
+        { name: "Хімчистка дверних карт (од.)", prices: ["від 250", "від 250", "від 300", "від 300"], isMain: false, isUnit: true },
+        { name: "Хімчистка багажника", prices: ["від 500", "від 500", "від 500", "від 500"], isMain: false },
+        { name: "Хімчистка керма", prices: ["від 300", "від 300", "від 300", "від 300"], isMain: false },
+        { name: "Хімчистка ременів безпеки (од.)", prices: ["від 100", "від 100", "від 100", "від 100"], isMain: false, isUnit: true },
+        { name: "Озонація салону за од. цикл", prices: ["750", "750", "750", "750"], isMain: false },
+        { name: "Пилосос салону", prices: ["від 250", "від 250", "від 300", "від 350"], isMain: false },
+        { name: "Вологе прибирання салону", prices: ["200", "200", "250", "від 300"], isMain: false }
+      ],
+      exterior: [
+        { name: "Полімерний твердий віск (6-8 міс)", prices: ["1500", "1700", "1800", "від 1900"], isMain: true },
+        { name: "Базовий твердий віск (3 міс)", prices: ["1200", "1300", "1400", "від 1500"], isMain: true },
+        { name: "Полімерний рідкий віск", prices: ["400", "400", "500", "від 500"], isMain: false },
+        { name: "Керамічне покриття", prices: ["12000", "12500", "13000", "14500"], isMain: true },
+        { name: "Антидощ (на всі стекла)", prices: ["1500", "1500", "від 1700", "від 1700"], isMain: false },
+        { name: "Антидощ (лобове скло та 2 передніх)", prices: ["700", "700", "800", "800"], isMain: false },
+        { name: "Глибока чистка скла (за од.)", prices: ["500", "500", "500", "500"], isMain: false, isUnit: true },
+        { name: "Керамічне покриття лобового скла", prices: ["2000", "2000", "2000", "2000"], isMain: false },
+        { name: "Керамічне покриття для оптики", prices: ["500", "500", "500", "500"], isMain: false }
+      ],
+      detailing: [
+        { name: "Глибока чистка кузова (бітум та ін.)", prices: ["від 3000", "від 4000", "від 4500", "від 4500"], isMain: true },
+        { name: "Глибока чистка кузова (од.)", prices: ["від 300", "від 300", "від 300", "від 300"], isMain: false, isUnit: true },
+        { name: "Антимошка", prices: ["150", "150", "150", "150"], isMain: false },
+        { name: "Відновлення хромових частин (од.)", prices: ["від 500", "від 500", "від 500", "від 500"], isMain: false, isUnit: true },
+        { name: "Знежирення ЛФП", prices: ["500", "500", "від 500", "від 500"], isMain: false },
+        { name: "Чистка дисків (од.)", prices: ["від 150", "від 150", "від 150", "від 150"], isMain: false, isUnit: true },
+        { name: "Чорніння гуми", prices: ["150", "150", "150", "150"], isMain: false }
+      ],
+      polish: [
+        { name: "Косметичне полірування", prices: ["від 8000", "від 8000", "від 10000", "від 10000"], isMain: true },
+        { name: "Експрес полірування", prices: ["від 4000", "від 4000", "від 5000", "від 5000"], isMain: true },
+        { name: "Глибоке полірування", prices: ["від 15000", "від 15000", "від 15000", "від 15000"], isMain: true },
+        { name: "Полірування деталі (од.)", prices: ["від 500", "від 500", "від 500", "від 500"], isMain: false, isUnit: true },
+        { name: "Полірування оптики (од.)", prices: ["від 2500", "від 2500", "від 2500", "від 2500"], isMain: false, isUnit: true }
+      ]
+    };
+
+    let currentCarClass = 1;
+    let currentCategory = 'wash';
+    let cart = [];
+
+    const carModelInput = document.getElementById('car-model');
+    const modalCarClass = document.getElementById('modal-car-class');
+    const catButtons = document.querySelectorAll('.cat-btn');
+    const mainContainer = document.getElementById('main-services');
+    const extrasContainer = document.getElementById('extra-services');
+    const cartContainer = document.getElementById('cart-items');
+    const modalTotal = document.getElementById('modal-total');
+    const mainSummary = document.getElementById('main-summary');
+    const mainSummaryText = document.getElementById('main-summary-text');
+    const mainTotal = document.getElementById('main-total');
+    const dateInput = document.getElementById('date-input');
+    const timeInput = document.getElementById('time-input');
+    const nameInput = document.getElementById('name');
+    const contactInput = document.getElementById('contact');
+    const submitButton = document.getElementById('submit');
+    const messageElement = document.getElementById('message');
+    const modal = document.getElementById('calc-modal');
+
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+
+    function getNumericPrice(priceString) {
+      const match = priceString.match(/\d+/);
+      return match ? parseInt(match[0]) : 0;
+    }
+
+    window.removeFromCart = function(serviceName) {
+      cart = cart.filter(item => item.service.name !== serviceName);
+      renderServices();
+    };
+
+    window.changeQty = function(serviceName, delta) {
+      const item = cart.find(i => i.service.name === serviceName);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.service.name !== serviceName);
+      renderServices();
+    };
+
+    function updateCartUI() {
+      cartContainer.innerHTML = '';
+      if (cart.length === 0) {
+        cartContainer.className = 'empty-cart';
+        cartContainer.innerHTML = 'Послуги не обрані';
+        modalTotal.textContent = 'Разом: 0 грн';
+        mainSummary.classList.remove('active');
+        return;
+      }
+      cartContainer.className = '';
+      let total = 0;
+      let itemsCount = 0;
+      const carClassIndex = currentCarClass - 1;
+
+      cart.forEach((item, index) => {
+        const price = getNumericPrice(item.service.prices[carClassIndex]);
+        const itemTotal = price * item.qty;
+        total += itemTotal;
+        itemsCount += item.qty;
+
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+          <div class="cart-item-title">
+            ${item.service.name} ${item.qty > 1 ? `<b>x${item.qty}</b>` : ''} 
+            <span style="color:#718096; font-size:12px;">(${itemTotal} грн)</span>
+          </div>
+          <div class="cart-item-remove" onclick="removeFromCart('${item.service.name}')">✕</div>
+        `;
+        cartContainer.appendChild(el);
+      });
+
+      modalTotal.textContent = `Разом: ${total} грн`;
+      mainSummary.classList.add('active');
+      mainSummaryText.textContent = `Обрано послуг: ${itemsCount} шт.`;
+      mainTotal.textContent = `${total} грн`;
+    }
+
+    function renderServices() {
+      mainContainer.innerHTML = '';
+      extrasContainer.innerHTML = '';
+      const services = servicesDB[currentCategory];
+      const carClassIndex = currentCarClass - 1;
+
+      services.forEach((service) => {
+        const cartItem = cart.find(i => i.service.name === service.name);
+        const price = service.prices[carClassIndex];
+        const card = document.createElement('div');
+        card.className = 'service-card';
+        if (cartItem) card.classList.add('active');
+        card.innerHTML = `
+          <div class="service-info"><div class="service-title">${service.name}</div></div>
+          <div class="service-price">${price} грн</div>
+        `;
+
+        if (service.isMain) {
+          card.addEventListener('click', () => {
+            const existingMainIndex = cart.findIndex(i => i.category === currentCategory && i.service.isMain);
+            if (existingMainIndex > -1) {
+              if (cart[existingMainIndex].service.name === service.name) cart.splice(existingMainIndex, 1);
+              else cart[existingMainIndex] = { service: service, qty: 1, category: currentCategory };
+            } else {
+              cart.push({ service: service, qty: 1, category: currentCategory });
+            }
+            renderServices();
+          });
+          mainContainer.appendChild(card);
+        } else {
+          if (cartItem && service.isUnit) {
+            const controls = document.createElement('div');
+            controls.className = 'qty-controls';
+            controls.innerHTML = `
+              <button class="qty-btn" onclick="event.stopPropagation(); changeQty('${service.name}', -1)">-</button>
+              <span class="qty-val">${cartItem.qty}</span>
+              <button class="qty-btn" onclick="event.stopPropagation(); changeQty('${service.name}', 1)">+</button>
+            `;
+            card.appendChild(controls);
+          }
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.qty-controls')) return;
+            if (cartItem) cart = cart.filter(i => i.service.name !== service.name);
+            else cart.push({ service: service, qty: 1, category: currentCategory });
+            renderServices();
+          });
+          extrasContainer.appendChild(card);
+        }
+      });
+      if (extrasContainer.children.length === 0) {
+        extrasContainer.innerHTML = '<p style="color:#718096; font-size:14px; text-align:center;">Для цієї категорії немає додаткових послуг.</p>';
+      }
+      updateCartUI();
+    }
+
+    modalCarClass.addEventListener('change', (e) => {
+      currentCarClass = parseInt(e.target.value);
+      renderServices();
+    });
+
+    document.getElementById('open-calc').addEventListener('click', () => {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('close-calc').addEventListener('click', closeModal);
+    document.getElementById('apply-calc').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    catButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.cat;
+        renderServices();
+      });
+    });
+
+    submitButton.addEventListener('click', async function() {
+      const name = nameInput.value.trim();
+      const contact = contactInput.value.trim();
+      const dateVal = dateInput.value;
+      const timeVal = timeInput.value.trim();
+      const exactModel = carModelInput.value.trim();
+      
+      if (!dateVal || !timeVal) { 
+        messageElement.textContent = 'Будь ласка, оберіть дату та вкажіть час візиту.'; 
+        messageElement.className = 'message-error'; 
+        return; 
+      }
+      if (name === '' || contact === '') { 
+        messageElement.textContent = 'Будь ласка, заповніть ім\'я та контакт.'; 
+        messageElement.className = 'message-error'; 
+        return; 
+      }
+      if (exactModel === '') { 
+        messageElement.textContent = 'Будь ласка, вкажіть марку та модель вашого авто.'; 
+        messageElement.className = 'message-error'; 
+        carModelInput.focus(); 
+        return; 
+      }
+
+      messageElement.textContent = 'Відправляємо...';
+      messageElement.className = 'subtitle-center';
+
+      const rawDate = new Date(dateVal);
+      const formattedDate = rawDate.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+      let itemsText = "";
+      cart.forEach(item => { itemsText += `- ${item.service.name} (x${item.qty})\n`; });
+      const finalPrice = mainTotal.textContent;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, contact: contact, price: finalPrice, car: exactModel, items: itemsText, date: formattedDate, time: timeVal })
+        });
+
+        const data = await response.json();
+        if (data.ok) {
+          messageElement.textContent = 'Заявку відправлено! Адміністратор зв\'яжеться з вами.';
+          messageElement.className = 'message-success';
+          nameInput.value = ''; contactInput.value = ''; dateInput.value = ''; timeInput.value = ''; carModelInput.value = '';
+        } else {
+          messageElement.textContent = 'Помилка відправки. Спробуйте пізніше.';
+          messageElement.className = 'message-error';
+        }
+      } catch (error) {
+        messageElement.textContent = 'Помилка мережі. Перевірте інтернет.';
+        messageElement.className = 'message-error';
+      }
+    });
+
+    renderServices();
+  </script>
+</body>
+</html>
