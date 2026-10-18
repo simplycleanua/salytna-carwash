@@ -124,6 +124,45 @@
     .empty-cart { color: #a0aec0; font-size: 13px; font-style: italic; }
     
     .modal-total { font-size: 22px; font-weight: bold; color: #1a252f; text-align: right; margin-top: 15px; }
+     /* Виджет чата */
+    .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Segoe UI', Arial, sans-serif; }
+    
+    /* Кнопка-облачко */
+    .chat-button { 
+      width: 60px; height: 60px; background: #eab308; border-radius: 50%; 
+      display: flex; align-items: center; justify-content: center; cursor: pointer; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s; 
+    }
+    .chat-button:hover { transform: scale(1.1); }
+    .chat-button svg { width: 30px; height: 30px; fill: white; }
+
+    /* Всплывающее окно (Облачко) */
+    .chat-popup { 
+      position: absolute; bottom: 75px; right: 0; width: 280px; 
+      background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+      padding: 20px; display: none; transform-origin: bottom right; 
+      animation: bounceIn 0.3s ease-out; 
+    }
+    .chat-popup.active { display: block; }
+    
+    /* Хвостик облачка */
+    .chat-popup::after { 
+      content: ''; position: absolute; bottom: -10px; right: 20px; 
+      border-width: 10px 10px 0; border-style: solid; border-color: white transparent transparent transparent; 
+    }
+    
+    .chat-popup h3 { margin: 0 0 10px 0; font-size: 16px; color: #1a252f; }
+    .chat-popup p { margin: 0 0 15px 0; font-size: 13px; color: #718096; line-height: 1.4; }
+    
+    .chat-link-btn { 
+      display: block; width: 100%; padding: 10px; background: #eab308; color: white; 
+      text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; 
+      transition: background 0.2s; 
+    }
+    .chat-link-btn:hover { background: #ca8a04; }
+    
+    /* Крестик закрытия */
+    .chat-close { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 18px; color: #a0aec0; }
   </style>
 </head>
 <body>
@@ -218,6 +257,20 @@
     </div>
   </div>
 
+    <!-- ВИДЖЕТ ЧАТА -->
+  <div class="chat-widget" id="chat-widget">
+    <div class="chat-popup" id="chat-popup">
+      <span class="chat-close" id="chat-close">✕</span>
+      <h3>Є питання?</h3>
+      <p>Напишіть нам у Telegram, і ми відповімо на всі питання щодо запису та послуг.</p>
+      <!-- ВАЖНО: Замени 'simplycleanua' на свой реальный юзернейм в Telegram! -->
+      <a href="https://t.me/salytna_carwash" target="_blank" class="chat-link-btn">Написати в Telegram</a>
+    </div>
+    <div class="chat-button" id="chat-button">
+      <!-- Иконка облачка с точками -->
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+    </div>
+  </div>
   <script>
     const API_URL = '/send';
 
@@ -494,6 +547,19 @@
     });
 
     renderServices();
+    // Логика виджета чата
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const chatClose = document.getElementById('chat-close');
+
+    chatButton.addEventListener('click', () => {
+      chatPopup.classList.toggle('active');
+    });
+
+    chatClose.addEventListener('click', (e) => {
+      e.stopPropagation(); // Чтобы не срабатывал клик по кнопке
+      chatPopup.classList.remove('active');
+    });
   </script>
 </body>
 </html>
