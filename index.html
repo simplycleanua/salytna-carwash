@@ -79,24 +79,33 @@
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
     
-    /* ИСПРАВЛЕНИЕ 1: Принудительный белый цвет для всех инпутов (включая автозаполнение) */
+    /* ЯДЕРНЫЙ ФИКС ДЛЯ ЦВЕТА ТЕКСТА НА iOS */
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
       border: 1px solid var(--card-border); border-radius: 12px; font-size: 15px; font-weight: 500;
-      background: rgba(0, 0, 0, 0.25); 
+      background-color: rgba(0, 0, 0, 0.25) !important; 
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.4); 
       color: var(--text-main) !important; 
-      -webkit-text-fill-color: var(--text-main) !important; /* Фикс для iOS */
+      -webkit-text-fill-color: var(--text-main) !important; 
       caret-color: var(--accent);
       outline: none; font-family: inherit; transition: all 0.3s ease; 
       -webkit-appearance: none; appearance: none;
+    }
+    /* Фикс автозаполнения Safari */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px #1a1c23 inset !important;
+      -webkit-text-fill-color: white !important;
+      transition: background-color 5000s ease-in-out 0s;
     }
     input::placeholder { 
       color: #6b7280 !important; 
       -webkit-text-fill-color: #6b7280 !important; 
       opacity: 1;
     }
-    input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); background: rgba(0, 0, 0, 0.4); }
+    input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); background: rgba(0, 0, 0, 0.4) !important; }
     
     input[type="date"]::-webkit-calendar-picker-indicator,
     input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; cursor: pointer; }
@@ -469,13 +478,12 @@
     updateStatus();
     setInterval(updateStatus, 60000);
 
-    // --- ИСПРАВЛЕНИЕ 2: Добавление нескольких фото ---
     photoInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
       
       if (files.length + selectedPhotos.length > 3) {
         alert("Можна додати не більше 3 фото.");
-        e.target.value = ''; // Сброс
+        e.target.value = '';
         return;
       }
 
@@ -486,7 +494,6 @@
         }
       }
       
-      // Перерисовываем ВСЕ фото из массива (а не только новые)
       photoPreview.innerHTML = '';
       selectedPhotos.forEach(photoBase64 => {
         const img = document.createElement('img');
@@ -494,7 +501,7 @@
         photoPreview.appendChild(img);
       });
       
-      e.target.value = ''; // Очищаем инпут, чтобы можно было выбрать тот же файл снова
+      e.target.value = '';
     });
 
     function compressImage(file) {
@@ -721,7 +728,7 @@
           messageElement.textContent = 'Заявку відправлено! Адміністратор зв\'яжеться з вами.';
           messageElement.className = 'message-success';
           
-          generateCalendarLink(dateVal, timeVal, exactModel);
+          generateICSFile(dateVal, timeVal, exactModel);
 
           nameInput.value = ''; contactInput.value = ''; dateInput.value = ''; timeInput.value = ''; carModelInput.value = '';
           photoInput.value = ''; photoPreview.innerHTML = ''; selectedPhotos = [];
@@ -736,16 +743,35 @@
       }
     });
 
-    function generateCalendarLink(dateStr, timeStr, carModel) {
+    // НОВАЯ ФУНКЦИЯ ГЕНЕРАЦИИ ФАЙЛА .ICS ДЛЯ НАТИВНОГО КАЛЕНДАРЯ
+    function generateICSFile(dateStr, timeStr, carModel) {
       const startDate = new Date(`${dateStr}T${timeStr}:00`);
       const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
-      const formatUTC = (date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-      const text = encodeURIComponent(`Мийка авто: ${carModel}`);
-      const dates = `${formatUTC(startDate)}/${formatUTC(endDate)}`;
-      const location = encodeURIComponent('Київ, вул. Салютна, 5Б');
-      const details = encodeURIComponent('Ваш запис на автомийці "Салютна". Чекаємо на вас!');
-      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&location=${location}&details=${details}`;
-      calendarBtn.href = googleCalUrl;
+      
+      const formatICSDate = (date) => {
+        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+      };
+
+      const icsContent = 
+        "BEGIN:VCALENDAR\n" +
+        "VERSION:2.0\n" +
+        "PRODID:-//Salytna Carwash//Online Booking//EN\n" +
+        "BEGIN:VEVENT\n" +
+        "UID:" + Date.now() + "@salytna.com\n" +
+        "DTSTAMP:" + formatICSDate(new Date()) + "\n" +
+        "DTSTART:" + formatICSDate(startDate) + "\n" +
+        "DTEND:" + formatICSDate(endDate) + "\n" +
+        "SUMMARY:Мийка авто: " + carModel + "\n" +
+        "DESCRIPTION:Ваш запис на автомийці 'Салютна'. Чекаємо на вас!\n" +
+        "LOCATION:Київ, вул. Салютна, 5Б\n" +
+        "END:VEVENT\n" +
+        "END:VCALENDAR";
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      
+      calendarBtn.href = url;
+      calendarBtn.download = 'Zapys_Avtomyika.ics';
       calendarBtn.style.display = 'block';
     }
 
