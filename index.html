@@ -6,7 +6,6 @@
   <title>Автомийка на Салютній — Онлайн-запис</title>
   <meta name="theme-color" content="#facc15">
   
-  <!-- PWA (Добавление на главный экран) -->
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logo.png">
 
@@ -80,15 +79,23 @@
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
     
+    /* ИСПРАВЛЕНИЕ 1: Принудительный белый цвет для всех инпутов (включая автозаполнение) */
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
       border: 1px solid var(--card-border); border-radius: 12px; font-size: 15px; font-weight: 500;
       background: rgba(0, 0, 0, 0.25); 
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.4); 
-      color: var(--text-main); outline: none; font-family: inherit; transition: all 0.3s ease; 
+      color: var(--text-main) !important; 
+      -webkit-text-fill-color: var(--text-main) !important; /* Фикс для iOS */
+      caret-color: var(--accent);
+      outline: none; font-family: inherit; transition: all 0.3s ease; 
       -webkit-appearance: none; appearance: none;
     }
-    input::placeholder { color: #6b7280; }
+    input::placeholder { 
+      color: #6b7280 !important; 
+      -webkit-text-fill-color: #6b7280 !important; 
+      opacity: 1;
+    }
     input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); background: rgba(0, 0, 0, 0.4); }
     
     input[type="date"]::-webkit-calendar-picker-indicator,
@@ -103,10 +110,9 @@
     .photo-upload-box input[type="file"] { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer; }
     .photo-icon { font-size: 24px; margin-bottom: 8px; }
     .photo-text { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-    .photo-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-    .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--card-border); }
+    .photo-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; justify-content: center;}
+    .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--card-border); animation: bounceIn 0.3s ease-out;}
 
-    /* Кнопка добавления в календарь */
     #calendar-btn { display: none; width: 100%; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 12px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.3s;}
     #calendar-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted);}
 
@@ -298,7 +304,6 @@
   
   <p class="subtitle-center" id="message" style="margin-top:20px; font-size: 11px;">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</p>
 
-  <!-- БЛОК ОТЗЫВОВ -->
   <div class="reviews-section">
     <h2>Відгуки клієнтів</h2>
     
@@ -317,7 +322,6 @@
     <a href="https://maps.app.goo.gl/AnpHokrvB53TSRQW6" target="_blank" class="btn-google-review">Читати всі відгуки в Google</a>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО -->
   <div class="modal-overlay" id="calc-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -356,7 +360,6 @@
     </div>
   </div>
 
-  <!-- ЧАТ -->
   <div class="chat-widget" id="chat-widget">
     <div class="chat-popup" id="chat-popup">
       <span class="chat-close" id="chat-close">✕</span>
@@ -450,13 +453,11 @@
     const photoPreview = document.getElementById('photo-preview');
     const calendarBtn = document.getElementById('calendar-btn');
 
-    // --- СТАТУС ОТКРЫТО/ЗАКРЫТО ---
     function updateStatus() {
       const now = new Date();
       const hour = now.getHours();
       const dot = document.getElementById('status-dot');
       const text = document.getElementById('status-text');
-      
       if (hour >= 9 && hour < 21) {
         dot.className = 'dot open';
         text.textContent = 'Відчинено до 21:00';
@@ -468,26 +469,32 @@
     updateStatus();
     setInterval(updateStatus, 60000);
 
-    // --- ЗАГРУЗКА И СЖАТИЕ ФОТО ---
+    // --- ИСПРАВЛЕНИЕ 2: Добавление нескольких фото ---
     photoInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
+      
       if (files.length + selectedPhotos.length > 3) {
         alert("Можна додати не більше 3 фото.");
+        e.target.value = ''; // Сброс
         return;
       }
-
-      photoPreview.innerHTML = '';
 
       for (const file of files) {
         if (file.type.startsWith('image/')) {
           const compressedBase64 = await compressImage(file);
           selectedPhotos.push(compressedBase64);
-          
-          const img = document.createElement('img');
-          img.src = compressedBase64;
-          photoPreview.appendChild(img);
         }
       }
+      
+      // Перерисовываем ВСЕ фото из массива (а не только новые)
+      photoPreview.innerHTML = '';
+      selectedPhotos.forEach(photoBase64 => {
+        const img = document.createElement('img');
+        img.src = photoBase64;
+        photoPreview.appendChild(img);
+      });
+      
+      e.target.value = ''; // Очищаем инпут, чтобы можно было выбрать тот же файл снова
     });
 
     function compressImage(file) {
@@ -653,7 +660,6 @@
       });
     });
 
-    // --- ОТПРАВКА ФОРМЫ ---
     submitButton.addEventListener('click', async function() {
       const name = nameInput.value.trim();
       const contact = contactInput.value.trim();
