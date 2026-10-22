@@ -16,8 +16,8 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg-color: #0f1115; /* Еще более темный фон для контраста */
-      --card-bg: rgba(21, 23, 28, 0.75); /* Полупрозрачный фон карточек */
+      --bg-color: #0f1115;
+      --card-bg: rgba(21, 23, 28, 0.75);
       --card-border: rgba(255, 255, 255, 0.15);
       --text-main: #ffffff;
       --text-muted: #9ca3af; 
@@ -49,17 +49,18 @@
       height: 100vh;
       object-fit: cover;
       z-index: -2;
-      opacity: 0.6; /* Видео немного приглушено */
+      opacity: 0.5; 
+      pointer-events: none; /* Чтобы видео не перехватывало клики */
     }
 
-    /* ЗАТЕМНЯЮЩИЙ ОВЕРЛЕЙ (Чтобы текст читался) */
+    /* ЗАТЕМНЯЮЩИЙ ОВЕРЛЕЙ */
     #bg-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(180deg, rgba(15, 17, 21, 0.7) 0%, rgba(15, 17, 21, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(15, 17, 21, 0.8) 0%, rgba(15, 17, 21, 0.95) 100%);
       z-index: -1;
     }
     
@@ -105,7 +106,6 @@
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
     
-    /* Поля ввода (оставил сплошными, чтобы видео не мешало читать текст) */
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
       border: 1px solid var(--card-border); border-radius: 12px; 
@@ -251,9 +251,8 @@
 <body>
 
   <!-- ВИДЕО-ФОН И ЗАТЕМНЕНИЕ -->
-  <!-- Сюда ты сможешь потом поставить ссылку на свое видео или локальный файл bg.mp4 -->
-  <video autoplay loop muted playsinline id="bg-video">
-    <source src="https://assets.mixkit.co/videos/preview/mixkit-washing-a-car-with-a-high-pressure-water-jet-42558-large.mp4" type="video/mp4">
+  <video autoplay loop muted playsinline webkit-playsinline id="bg-video">
+    <source src="https://videos.pexels.com/video-files/4125025/4125025-hd_1920_1080_25fps.mp4" type="video/mp4">
   </video>
   <div id="bg-overlay"></div>
 
@@ -438,6 +437,22 @@
   </div>
 
   <script>
+    // --- СКРИПТ ДЛЯ ПРИНУДИТЕЛЬНОГО ЗАПУСКА ВИДЕО ---
+    document.addEventListener("DOMContentLoaded", function() {
+      var video = document.getElementById("bg-video");
+      var playPromise = video.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.then(_ => {
+          // Автовоспроизведение запущено
+        }).catch(error => {
+          // Если браузер заблокировал, скрываем видео, чтобы не было кнопки Play
+          console.log("Видео заблокировано браузером.");
+          video.style.display = 'none';
+        });
+      }
+    });
+
     const API_URL = '/send';
 
     const servicesDB = {
