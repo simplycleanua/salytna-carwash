@@ -15,6 +15,7 @@
 
   <style>
     :root {
+      color-scheme: dark; /* Говорим iOS, что сайт темный */
       --bg-color: #15171c; 
       --bg-gradient: radial-gradient(circle at 50% 0%, #242730 0%, #15171c 60%);
       --card-bg: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
@@ -79,17 +80,19 @@
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
     
-    /* ЯДЕРНЫЙ ФИКС ДЛЯ ЦВЕТА ТЕКСТА НА iOS */
+    /* ЖЕСТКИЙ ФИКС ДЛЯ ЦВЕТА ТЕКСТА НА iOS */
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
       border: 1px solid var(--card-border); border-radius: 12px; font-size: 15px; font-weight: 500;
-      background-color: rgba(0, 0, 0, 0.25) !important; 
+      background-color: #1a1c23 !important; /* Сплошной темный фон */
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.4); 
-      color: var(--text-main) !important; 
-      -webkit-text-fill-color: var(--text-main) !important; 
+      color: #ffffff !important; 
+      -webkit-text-fill-color: #ffffff !important; 
+      text-shadow: 0 0 0 #ffffff; /* Хак для Safari, заставляет рендерить белым */
       caret-color: var(--accent);
       outline: none; font-family: inherit; transition: all 0.3s ease; 
       -webkit-appearance: none; appearance: none;
+      opacity: 1;
     }
     /* Фикс автозаполнения Safari */
     input:-webkit-autofill,
@@ -103,9 +106,10 @@
     input::placeholder { 
       color: #6b7280 !important; 
       -webkit-text-fill-color: #6b7280 !important; 
+      text-shadow: none !important;
       opacity: 1;
     }
-    input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); background: rgba(0, 0, 0, 0.4) !important; }
+    input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); background-color: #1a1c23 !important; }
     
     input[type="date"]::-webkit-calendar-picker-indicator,
     input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; cursor: pointer; }
@@ -743,7 +747,6 @@
       }
     });
 
-    // НОВАЯ ФУНКЦИЯ ГЕНЕРАЦИИ ФАЙЛА .ICS ДЛЯ НАТИВНОГО КАЛЕНДАРЯ
     function generateICSFile(dateStr, timeStr, carModel) {
       const startDate = new Date(`${dateStr}T${timeStr}:00`);
       const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
