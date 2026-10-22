@@ -4,182 +4,204 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Автомийка на Салютній — Онлайн-запис</title>
+  
+  <!-- Подключаем современный шрифт -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; max-width: 550px; margin: 0 auto; padding: 20px 15px; color: #2c3e50; overflow-x: hidden; }
+    :root {
+      --bg-color: #0a0a0a;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #facc15;
+      --accent-hover: #eab308;
+      --accent-glow: rgba(250, 204, 21, 0.3);
+    }
+
+    * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+    
+    body { 
+      background-color: var(--bg-color); 
+      /* Легкий неоновый градиент на фоне */
+      background-image: radial-gradient(circle at 50% 0%, rgba(250, 204, 21, 0.05) 0%, transparent 50%);
+      max-width: 550px; 
+      margin: 0 auto; 
+      padding: 20px 15px; 
+      color: var(--text-main); 
+      overflow-x: hidden; 
+    }
     
     /* Анимации */
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); } }
+    @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 var(--accent-glow); } 70% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); } 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); } }
     @keyframes slideInRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.5); } 60% { opacity: 1; transform: scale(1.1); } 100% { transform: scale(1); } }
+    @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.5); } 60% { opacity: 1; transform: scale(1.05); } 100% { transform: scale(1); } }
 
-    .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 25px; margin-top: 10px; }
-    .form-group { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
-    .form-group:nth-child(2) { animation-delay: 0.2s; }
-    .form-group:nth-child(3) { animation-delay: 0.3s; }
-
-    .header-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .header-text { text-align: left; }
-    .header-text h1 { margin: 0; font-size: 22px; color: #1a252f; line-height: 1.1; }
-    .header-text p { margin: 4px 0 0 0; font-size: 13px; color: #718096; font-weight: 600; text-transform: lowercase; letter-spacing: 0.5px; }
-
-    .subtitle-center { text-align: center; color: #718096; margin-bottom: 25px; font-size: 14px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.2s; }
-    h2 { font-size: 18px; color: #34495e; margin-top: 25px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+    /* Шапка */
+    .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; margin-top: 10px; padding: 0 5px;}
     
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568; font-size: 14px; }
-    .form-group label span { color: #e53e3e; } 
+    .logo-group { display: flex; align-items: center; gap: 12px; }
+    .header-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+    .header-text h1 { margin: 0; font-size: 20px; color: var(--text-main); font-weight: 800; line-height: 1.1; }
+    .header-text p { margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* Ссылка на Instagram */
+    .insta-btn { 
+      display: flex; align-items: center; justify-content: center;
+      width: 45px; height: 45px; 
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 50%; color: var(--text-main); transition: all 0.3s;
+    }
+    .insta-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-2px); }
+    .insta-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+    .subtitle-center { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 14px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; font-weight: 500;}
+    
+    h2 { font-size: 16px; color: var(--text-main); margin-top: 30px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; display: flex; align-items: center; gap: 10px;}
+    h2::after { content: ""; flex-grow: 1; height: 1px; background: var(--card-border); }
+
+    /* Поля ввода */
+    .form-group { margin-bottom: 15px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+    .form-group:nth-child(2) { animation-delay: 0.1s; }
+    .form-group:nth-child(3) { animation-delay: 0.2s; }
+
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
+    .form-group label span { color: var(--accent); } 
     
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
-      display: block; width: 100%; padding: 14px 16px; border: 2px solid #cbd5e0; border-radius: 10px; font-size: 16px; 
-      background: #ffffff; color: #2c3e50; outline: none; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; 
+      display: block; width: 100%; padding: 16px; 
+      border: 1px solid var(--card-border); border-radius: 12px; font-size: 16px; 
+      background: var(--card-bg); color: var(--text-main); outline: none; font-family: inherit; transition: all 0.3s ease; 
       -webkit-appearance: none; appearance: none;
     }
-    input:focus { border-color: #eab308; box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15); }
+    input::placeholder { color: #475569; }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); background: rgba(255, 255, 255, 0.05); }
+    /* Меняем иконку календаря на белую */
+    ::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.5; cursor: pointer; }
 
-    .calc-trigger-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 30px; border-left: 4px solid #eab308; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.4s;}
-    .calc-trigger-box p { margin: 0 0 15px; font-size: 14px; color: #4a5568; }
-    .btn-calc { background: #fefce8; color: #a16207; border: 2px dashed #eab308; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s; font-size: 15px; }
-    .btn-calc:hover { background: #eab308; color: white; border-style: solid; }
+    /* Блок карты */
+    .map-card {
+      background: var(--card-bg); backdrop-filter: blur(10px);
+      border-radius: 16px; border: 1px solid var(--card-border);
+      padding: 15px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px;
+      cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit;
+      animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.3s;
+    }
+    .map-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow); }
+    .map-icon { background: rgba(250, 204, 21, 0.1); color: var(--accent); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .map-icon svg { width: 28px; height: 28px; fill: currentColor; }
+    .map-info { flex-grow: 1; text-align: left; }
+    .map-address { font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px; }
+    .map-hint { font-size: 12px; color: var(--text-muted); }
+    .map-arrow { color: var(--accent); font-size: 24px; font-weight: 300; }
+
+    /* Блок калькулятора */
+    .calc-trigger-box { background: var(--card-bg); backdrop-filter: blur(10px); padding: 20px; border-radius: 16px; border: 1px solid var(--card-border); margin-top: 25px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.4s;}
+    .calc-trigger-box p { margin: 0 0 15px; font-size: 13px; color: var(--text-muted); font-weight: 500;}
+    .btn-calc { background: transparent; color: var(--accent); border: 1px dashed var(--accent); padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;}
+    .btn-calc:hover { background: var(--accent); color: #000; border-style: solid; box-shadow: 0 0 20px var(--accent-glow); }
     .selected-services-summary { margin-top: 15px; font-size: 14px; display: none; }
     .selected-services-summary.active { display: block; animation: slideInRight 0.3s ease-out; }
-    .price-main { font-size: 24px; font-weight: bold; color: #1a252f; margin-top: 5px; }
+    .price-main { font-size: 24px; font-weight: 800; color: var(--accent); margin-top: 5px; text-shadow: 0 0 10px var(--accent-glow);}
 
+    /* Главная кнопка */
     .main-button { 
-      display: block; width: 100%; padding: 18px; margin-top: 20px; background: linear-gradient(135deg, #eab308, #ca8a04); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; 
-      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3); transition: all 0.2s ease; 
+      display: block; width: 100%; padding: 20px; margin-top: 25px; 
+      background: var(--accent); color: #000; border: none; border-radius: 12px; 
+      font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      cursor: pointer; transition: all 0.3s ease; 
       animation: pulseGlow 2.5s infinite, fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0s, 0.5s;
     }
-    .main-button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4); }
+    .main-button:hover { background: var(--accent-hover); transform: translateY(-3px); box-shadow: 0 10px 25px var(--accent-glow); }
     .main-button:active { transform: translateY(0) scale(0.98); }
 
-    .message-error { color: #e53e3e; font-weight: 500; margin-top: 10px; text-align: center; }
-    .message-success { color: #38a169; font-weight: bold; margin-top: 10px; text-align: center; animation: bounceIn 0.6s ease-out; }
+    .message-error { color: #ef4444; font-weight: 600; margin-top: 10px; text-align: center; font-size: 14px;}
+    .message-success { color: #22c55e; font-weight: 700; margin-top: 10px; text-align: center; animation: bounceIn 0.6s ease-out; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+    /* Модальное окно калькулятора */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; z-index: 1000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; }
     .modal-overlay.active { display: flex; opacity: 1; }
-    .modal-content { background: #f0f4f8; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 20px 20px 0 0; padding: 20px; overflow-y: auto; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+    .modal-content { background: #121212; border: 1px solid var(--card-border); border-bottom: none; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 24px 24px 0 0; padding: 25px 20px; overflow-y: auto; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
     .modal-overlay.active .modal-content { transform: translateY(0); }
     
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; position: sticky; top: -20px; background: #f0f4f8; padding: 10px 0; z-index: 10; }
-    .modal-title { font-size: 20px; font-weight: bold; color: #1a252f; margin: 0; }
-    .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #a0aec0; padding: 0; line-height: 1; transition: color 0.2s, transform 0.2s; }
-    .close-btn:hover { color: #e53e3e; transform: rotate(90deg); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: -25px; background: #121212; padding: 10px 0; z-index: 10; border-bottom: 1px solid var(--card-border); }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--text-main); margin: 0; text-transform: uppercase; letter-spacing: 1px;}
+    .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+    .close-btn:hover { color: #ef4444; border-color: #ef4444; transform: rotate(90deg); }
 
-    .modal-class-selector { margin-bottom: 15px; background: white; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e0; }
-    .modal-class-selector label { font-weight: bold; font-size: 13px; color: #4a5568; display: block; margin-bottom: 5px; }
+    .modal-class-selector { margin-bottom: 20px; background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .modal-class-selector label { font-weight: 600; font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase;}
     
-    select { display: block; width: 100%; padding: 12px; font-size: 16px; border: 2px solid #cbd5e0; border-radius: 10px; background: white; -webkit-appearance: menulist; appearance: menulist; }
+    select { display: block; width: 100%; padding: 14px; font-size: 15px; border: 1px solid var(--card-border); border-radius: 10px; background: #1a1a1a; color: white; -webkit-appearance: menulist; appearance: menulist; outline: none; }
 
-    .category-tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
-    .cat-btn { padding: 8px 14px; border: none; background: #e2e8f0; border-radius: 20px; cursor: pointer; font-size: 13px; color: #4a5568; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
-    .cat-btn.active { background: #eab308; color: white; transform: scale(1.05); }
+    .category-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+    .category-tabs::-webkit-scrollbar { display: none; }
+    .cat-btn { padding: 10px 18px; border: 1px solid var(--card-border); background: transparent; border-radius: 30px; cursor: pointer; font-size: 13px; color: var(--text-muted); white-space: nowrap; transition: all 0.3s; font-weight: 600; }
+    .cat-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
-    .service-card { background: white; border: 2px solid #cbd5e0; border-radius: 10px; padding: 12px; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .service-card:hover { border-color: #a0aec0; transform: scale(1.01); }
-    .service-card:active { transform: scale(0.97); }
-    .service-card.active { border-color: #eab308; background: #fefce8; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.15); }
+    .service-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .service-card:hover { border-color: rgba(255,255,255,0.2); transform: scale(1.01); }
+    .service-card:active { transform: scale(0.98); }
+    .service-card.active { border-color: var(--accent); background: rgba(250, 204, 21, 0.05); box-shadow: 0 0 15px rgba(250, 204, 21, 0.1); }
     
-    .service-title { font-weight: 600; font-size: 14px; color: #1a252f; }
-    .service-price { font-weight: bold; color: #a16207; font-size: 15px; }
+    .service-title { font-weight: 600; font-size: 14px; color: var(--text-main); }
+    .service-price { font-weight: 700; color: var(--accent); font-size: 15px; }
     
-    .qty-controls { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; padding: 2px; animation: bounceIn 0.3s ease-out;}
-    .qty-btn { background: #e2e8f0; border: none; width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; color: #4a5568; transition: background 0.1s; }
-    .qty-btn:active { background: #cbd5e0; }
-    .qty-val { font-weight: bold; min-width: 15px; text-align: center; font-size: 14px; }
+    .qty-controls { display: flex; align-items: center; gap: 10px; background: #1a1a1a; border: 1px solid var(--card-border); border-radius: 8px; padding: 4px; animation: bounceIn 0.3s ease-out;}
+    .qty-btn { background: transparent; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; color: var(--text-main); transition: background 0.2s; }
+    .qty-btn:active { background: var(--card-border); }
+    .qty-val { font-weight: 700; min-width: 15px; text-align: center; font-size: 14px; color: var(--accent);}
 
-    .cart-block { margin-top: 15px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #eab308; }
-    .cart-title { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #1a252f; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; font-size: 13px; animation: slideInRight 0.3s ease-out; }
+    .cart-block { margin-top: 20px; padding: 20px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; }
+    .cart-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--card-border); font-size: 13px; animation: slideInRight 0.3s ease-out; }
     .cart-item:last-child { border-bottom: none; }
-    .cart-item-remove { cursor: pointer; color: #e53e3e; font-weight: bold; margin-left: 8px; transition: transform 0.2s; }
-    .cart-item-remove:hover { transform: scale(1.3); }
-    .empty-cart { color: #a0aec0; font-size: 13px; font-style: italic; }
+    .cart-item-remove { cursor: pointer; color: #ef4444; font-weight: bold; margin-left: 10px; transition: transform 0.2s; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 6px;}
+    .cart-item-remove:hover { transform: scale(1.1); background: rgba(239, 68, 68, 0.2); }
+    .empty-cart { color: var(--text-muted); font-size: 13px; font-style: italic; }
     
-    .modal-total { font-size: 22px; font-weight: bold; color: #1a252f; text-align: right; margin-top: 15px; }
-    
-    /* Виджет чата */
-    .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: 'Segoe UI', Arial, sans-serif; }
-    .chat-button { width: 60px; height: 60px; background: #eab308; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s; }
-    .chat-button:hover { transform: scale(1.1); }
-    .chat-button svg { width: 30px; height: 30px; fill: white; }
-    .chat-popup { position: absolute; bottom: 75px; right: 0; width: 280px; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 20px; display: none; transform-origin: bottom right; animation: bounceIn 0.3s ease-out; }
-    .chat-popup.active { display: block; }
-    .chat-popup::after { content: ''; position: absolute; bottom: -10px; right: 20px; border-width: 10px 10px 0; border-style: solid; border-color: white transparent transparent transparent; }
-    .chat-popup h3 { margin: 0 0 10px 0; font-size: 16px; color: #1a252f; }
-    .chat-popup p { margin: 0 0 15px 0; font-size: 13px; color: #718096; line-height: 1.4; }
-    .chat-link-btn { display: block; width: 100%; padding: 10px; background: #eab308; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; transition: background 0.2s; }
-    .chat-link-btn:hover { background: #ca8a04; }
-    .chat-close { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 18px; color: #a0aec0; }
+    .modal-total { font-size: 24px; font-weight: 800; color: var(--text-main); text-align: right; margin-top: 20px; border-top: 1px solid var(--card-border); padding-top: 15px;}
 
-    /* Стили для нового блока с картой */
-    .map-card {
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border: 2px solid #cbd5e0;
-      padding: 15px;
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .map-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    }
-    .map-icon {
-      background: #fefce8;
-      color: #eab308;
-      width: 50px;
-      height: 50px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .map-icon svg {
-      width: 30px;
-      height: 30px;
-      fill: currentColor;
-    }
-    .map-info {
-      flex-grow: 1;
-      text-align: left;
-    }
-    .map-address {
-      font-weight: bold;
-      font-size: 15px;
-      color: #1a252f;
-      margin-bottom: 3px;
-    }
-    .map-hint {
-      font-size: 13px;
-      color: #718096;
-    }
-    .map-arrow {
-      color: #a0aec0;
-      font-size: 20px;
-    }
+    /* Виджет чата */
+    .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+    .chat-button { width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px var(--accent-glow); transition: transform 0.3s; }
+    .chat-button:hover { transform: scale(1.1); }
+    .chat-button svg { width: 28px; height: 28px; fill: #000; }
+    .chat-popup { position: absolute; bottom: 75px; right: 0; width: 280px; background: #121212; border: 1px solid var(--card-border); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); padding: 20px; display: none; transform-origin: bottom right; animation: bounceIn 0.3s ease-out; }
+    .chat-popup.active { display: block; }
+    .chat-popup::after { content: ''; position: absolute; bottom: -10px; right: 22px; border-width: 10px 10px 0; border-style: solid; border-color: #121212 transparent transparent transparent; }
+    .chat-popup h3 { margin: 0 0 10px 0; font-size: 16px; color: var(--text-main); font-weight: 700;}
+    .chat-popup p { margin: 0 0 15px 0; font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .chat-link-btn { display: block; width: 100%; padding: 12px; background: var(--accent); color: #000; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; transition: background 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
+    .chat-link-btn:hover { background: var(--accent-hover); }
+    .chat-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 16px; color: var(--text-muted); }
+    
   </style>
 </head>
 <body>
 
+  <!-- ШАПКА С ЛОГОТИПОМ И ИНСТОЙ -->
   <div class="header-container">
-    <img src="logo.png" alt="SALYTNA Logo" class="header-logo">
-    <div class="header-text">
-      <h1>Автомийка на Салютній</h1>
-      <p>salytna_carwash</p>
+    <div class="logo-group">
+      <img src="logo.png" alt="SALYTNA Logo" class="header-logo">
+      <div class="header-text">
+        <h1>Автомийка на Салютній</h1>
+        <p>PREMIUM DETAILING</p>
+      </div>
     </div>
+    <!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ИНСТУ НИЖЕ -->
+    <a href="https://instagram.com/salytna_carwash" target="_blank" class="insta-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+    </a>
   </div>
 
   <p class="subtitle-center">Онлайн-запис на професійний догляд за авто</p>
 
-  <h2>1. Ваш автомобіль <span style="color:#e53e3e">*</span></h2>
+  <h2>1. Ваш автомобіль <span style="color:var(--accent)">*</span></h2>
   <div class="form-group">
     <label for="car-model">Вкажіть марку та модель</label>
     <input list="car-models-list" id="car-model" placeholder="Напр. Volkswagen Passat" required>
@@ -188,7 +210,7 @@
     </datalist>
   </div>
 
-  <h2>2. Бажана дата та час <span style="color:#e53e3e">*</span></h2>
+  <h2>2. Дата та час <span style="color:var(--accent)">*</span></h2>
   <div class="form-group">
     <label for="date-input">Дата візиту</label>
     <input type="date" id="date-input" required>
@@ -198,7 +220,7 @@
     <input type="time" id="time-input" required>
   </div>
 
-  <h2>3. Ваші контакти <span style="color:#e53e3e">*</span></h2>
+  <h2>3. Контакти <span style="color:var(--accent)">*</span></h2>
   <div class="form-group">
     <input id="name" placeholder="Ваше ім'я" type="text" required>
   </div>
@@ -206,42 +228,44 @@
     <input id="contact" placeholder="Телефон або Telegram" type="tel" required>
   </div>
 
-  <!-- НОВЫЙ БЛОК С КАРТОЙ (КОМПАКТНЫЙ) -->
-  <h2>Як нас знайти</h2>
-  <a href="javascript:void(0)" id="map-route-btn" class="map-card" style="text-decoration: none; color: inherit;">
+  <!-- КАРТА -->
+  <h2>Локація</h2>
+  <a href="javascript:void(0)" id="map-route-btn" class="map-card">
     <div class="map-icon">
       <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
     </div>
     <div class="map-info">
       <div class="map-address">Київ, вул. Салютна, 5Б</div>
-      <div class="map-hint">Натисніть, щоб прокласти маршрут</div>
+      <div class="map-hint">Прокласти маршрут у Google Maps</div>
     </div>
     <div class="map-arrow">›</div>
   </a>
 
+  <!-- КАЛЬКУЛЯТОР -->
   <div class="calc-trigger-box">
     <p>Бажаєте дізнатися вартість послуг заздалегідь?</p>
-    <button class="btn-calc" id="open-calc">🧮 Розрахувати вартість (не обов'язково)</button>
+    <button class="btn-calc" id="open-calc">🧮 Калькулятор вартості</button>
     
     <div class="selected-services-summary" id="main-summary">
-      <div style="color:#718096; font-size:12px; margin-bottom:5px;">Попередньо обрано:</div>
-      <div id="main-summary-text" style="font-size:14px; color:#1a252f; margin-bottom:5px;"></div>
+      <div style="color:var(--text-muted); font-size:12px; margin-bottom:5px; text-transform:uppercase; font-weight:600;">Попередньо обрано:</div>
+      <div id="main-summary-text" style="font-size:14px; color:var(--text-main); margin-bottom:5px; font-weight:500;"></div>
       <div class="price-main" id="main-total">0 грн</div>
     </div>
   </div>
 
   <button class="main-button" id="submit">Записатися на мийку</button>
-  <p class="subtitle-center" id="message" style="margin-top:15px;">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</p>
+  <p class="subtitle-center" id="message" style="margin-top:20px; font-size: 11px;">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</p>
 
+  <!-- МОДАЛЬНОЕ ОКНО -->
   <div class="modal-overlay" id="calc-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Калькулятор послуг</h2>
+        <h2 class="modal-title">Калькулятор</h2>
         <button class="close-btn" id="close-calc">×</button>
       </div>
 
       <div class="modal-class-selector">
-        <label for="modal-car-class">Оберіть клас авто для розрахунку:</label>
+        <label for="modal-car-class">Оберіть клас авто:</label>
         <select id="modal-car-class">
           <option value="1">1 Клас (Седан, Купе, Хетчбек)</option>
           <option value="2">2 Клас (Універсал, Фургон)</option>
@@ -267,11 +291,11 @@
       </div>
       
       <div class="modal-total" id="modal-total">Разом: 0 грн</div>
-      <button class="main-button" style="margin-top:15px;" id="apply-calc">Застосувати та закрити</button>
+      <button class="main-button" style="margin-top:20px; animation:none; opacity:1;" id="apply-calc">Застосувати</button>
     </div>
   </div>
 
-  <!-- ВИДЖЕТ ЧАТА -->
+  <!-- ЧАТ ВИДЖЕТ -->
   <div class="chat-widget" id="chat-widget">
     <div class="chat-popup" id="chat-popup">
       <span class="chat-close" id="chat-close">✕</span>
@@ -406,15 +430,15 @@
         el.className = 'cart-item';
         el.innerHTML = `
           <div class="cart-item-title">
-            ${item.service.name} ${item.qty > 1 ? `<b>x${item.qty}</b>` : ''} 
-            <span style="color:#718096; font-size:12px;">(${itemTotal} грн)</span>
+            ${item.service.name} ${item.qty > 1 ? `<b style="color:var(--accent)">x${item.qty}</b>` : ''} 
+            <span style="color:var(--text-muted); font-size:12px; margin-left:5px;">(${itemTotal} грн)</span>
           </div>
           <div class="cart-item-remove" onclick="removeFromCart('${item.service.name}')">✕</div>
         `;
         cartContainer.appendChild(el);
       });
 
-      modalTotal.textContent = `Разом: ${total} грн`;
+      modalTotal.innerHTML = `Разом: <span style="color:var(--accent)">${total} грн</span>`;
       mainSummary.classList.add('active');
       mainSummaryText.textContent = `Обрано послуг: ${itemsCount} шт.`;
       mainTotal.textContent = `${total} грн`;
@@ -470,7 +494,7 @@
         }
       });
       if (extrasContainer.children.length === 0) {
-        extrasContainer.innerHTML = '<p style="color:#718096; font-size:14px; text-align:center;">Для цієї категорії немає додаткових послуг.</p>';
+        extrasContainer.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding: 10px;">Для цієї категорії немає додаткових послуг.</p>';
       }
       updateCartUI();
     }
@@ -529,6 +553,7 @@
 
       messageElement.textContent = 'Відправляємо...';
       messageElement.className = 'subtitle-center';
+      messageElement.style.color = 'var(--text-muted)';
 
       const rawDate = new Date(dateVal);
       const formattedDate = rawDate.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -575,11 +600,8 @@
       chatPopup.classList.remove('active');
     });
 
-       // ==========================================
-    // ЛОГИКА ДЛЯ ПЕРЕХОДА В GOOGLE КАРТЫ
-    // ==========================================
+    // Логика карты
     document.getElementById('map-route-btn').addEventListener('click', function() {
-      // На всех устройствах открываем Google Maps по твоей ссылке
       window.open('https://maps.app.goo.gl/AnpHokrvB53TSRQW6', '_blank');
     });
   </script>
