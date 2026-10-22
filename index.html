@@ -40,6 +40,13 @@
       position: relative;
     }
 
+    /* АНИМИРОВАННЫЙ ГРАДИЕНТ (Запасной фон, если видео заблокировано) */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     /* ФИКСИРОВАННЫЙ ВИДЕО-ФОН */
     #bg-video {
       position: fixed;
@@ -49,9 +56,14 @@
       height: 100vh;
       object-fit: cover;
       z-index: -2;
-      opacity: 0.5; 
-      pointer-events: none; /* Чтобы видео не перехватывало клики */
+      opacity: 0.4; 
+      pointer-events: none;
     }
+
+    /* ЖЕСТКОЕ СКРЫТИЕ КНОПКИ PLAY НА ВИДЕО (для iOS) */
+    video::-webkit-media-controls { display: none !important; }
+    video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+    video::-webkit-media-controls-panel { display: none !important; }
 
     /* ЗАТЕМНЯЮЩИЙ ОВЕРЛЕЙ */
     #bg-overlay {
@@ -60,7 +72,9 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(180deg, rgba(15, 17, 21, 0.8) 0%, rgba(15, 17, 21, 0.95) 100%);
+      background: linear-gradient(135deg, rgba(15, 17, 21, 0.85) 0%, rgba(30, 35, 45, 0.9) 50%, rgba(15, 17, 21, 0.95) 100%);
+      background-size: 200% 200%;
+      animation: gradientBG 10s ease infinite; /* Плавное переливание */
       z-index: -1;
     }
     
@@ -250,9 +264,10 @@
 </head>
 <body>
 
-  <!-- ВИДЕО-ФОН И ЗАТЕМНЕНИЕ -->
-  <video autoplay loop muted playsinline webkit-playsinline id="bg-video">
-    <source src="https://videos.pexels.com/video-files/4125025/4125025-hd_1920_1080_25fps.mp4" type="video/mp4">
+  <!-- ВИДЕО-ФОН (Если не загрузится, будет анимированный градиент) -->
+  <video autoplay loop muted playsinline webkit-playsinline preload="auto" id="bg-video">
+    <!-- Более надежная ссылка на видео с водными процедурами -->
+    <source src="https://assets.codepen.io/6093409/car-wash.mp4" type="video/mp4">
   </video>
   <div id="bg-overlay"></div>
 
@@ -446,8 +461,8 @@
         playPromise.then(_ => {
           // Автовоспроизведение запущено
         }).catch(error => {
-          // Если браузер заблокировал, скрываем видео, чтобы не было кнопки Play
-          console.log("Видео заблокировано браузером.");
+          // Если браузер заблокировал (например, режим энергосбережения),
+          // мы принудительно скрываем видео. Останется красивый анимированный градиент.
           video.style.display = 'none';
         });
       }
