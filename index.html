@@ -8,29 +8,52 @@
   
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logo.png">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* ВСЕ СТИЛИ ОСТАЛИСЬ ТЕМИ ЖЕ, Я ИХ УБРАЛ ДЛЯ КРАТКОСТИ ОТВЕТА, НО В ФАЙЛЕ ОНИ ЕСТЬ */
-    :root { color-scheme: dark; --bg-color: #0f1115; --card-bg: rgba(21, 23, 28, 0.75); --card-border: rgba(255, 255, 255, 0.15); --text-main: #ffffff; --text-muted: #9ca3af; --accent: #facc15; --accent-hover: #eab308; --accent-glow: rgba(250, 204, 21, 0.25); --success: #22c55e; }
+    :root {
+      color-scheme: dark;
+      --bg-color: #0f1115;
+      --card-bg: rgba(21, 23, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --text-main: #ffffff;
+      --text-muted: #9ca3af; 
+      --accent: #facc15;
+      --accent-hover: #eab308;
+      --accent-glow: rgba(250, 204, 21, 0.25);
+      --success: #22c55e;
+    }
+
     * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-    body { background-color: var(--bg-color); max-width: 550px; margin: 0 auto; padding: 20px 15px; color: var(--text-main); overflow-x: hidden; -webkit-font-smoothing: antialiased; position: relative; }
+    
+    body { 
+      background-color: var(--bg-color);
+      max-width: 550px; 
+      margin: 0 auto; 
+      padding: 20px 15px; 
+      color: var(--text-main); 
+      overflow-x: hidden; 
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
     @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     #bg-video { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; opacity: 0.4; pointer-events: none; }
     video::-webkit-media-controls { display: none !important; }
     video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
     video::-webkit-media-controls-panel { display: none !important; }
     #bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, rgba(15, 17, 21, 0.85) 0%, rgba(30, 35, 45, 0.9) 50%, rgba(15, 17, 21, 0.95) 100%); background-size: 200% 200%; animation: gradientBG 10s ease infinite; z-index: -1; }
+    
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 var(--accent-glow); } 70% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); } 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); } }
     @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.5); } 60% { opacity: 1; transform: scale(1.05); } 100% { transform: scale(1); } }
     @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
     @keyframes drawCheck { to { stroke-dashoffset: 0; } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 10px; padding: 0 5px;}
+
+    .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; margin-top: 10px; padding: 0 5px;}
     .logo-group { display: flex; align-items: center; gap: 12px; }
     .header-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.1); }
     .header-text h1 { margin: 0; font-size: 18px; color: var(--text-main); font-weight: 800; line-height: 1.1; }
@@ -38,22 +61,75 @@
     .insta-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--card-border); border-radius: 50%; color: var(--text-main); transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     .insta-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-2px); }
     .insta-btn svg { width: 22px; height: 22px; fill: currentColor; }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; margin: 0 auto 20px; padding: 6px 14px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); border: 1px solid var(--card-border); border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
+
+    /* БЛОК ТЕЛЕФОНА И СТАТУСА */
+    .top-info-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      animation: fadeInUp 0.6s ease-out forwards; 
+      opacity: 0; 
+      animation-delay: 0.1s;
+    }
+
+    .phone-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .phone-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+      color: var(--accent);
+    }
+    .phone-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .status-badge { 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+      padding: 6px 14px; 
+      background: rgba(0,0,0,0.5); 
+      backdrop-filter: blur(5px); 
+      border: 1px solid var(--card-border); 
+      border-radius: 20px; 
+      font-size: 12px; 
+      font-weight: 600; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+    }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
     .dot.open { background: var(--success); animation: pulseDot 2s infinite; }
     .dot.closed { background: #ef4444; }
     .status-text { color: var(--text-muted); }
+    
     .subtitle-center { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; font-weight: 500;}
     h2 { font-size: 15px; color: var(--text-main); margin-top: 30px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; display: flex; align-items: center; gap: 10px;}
     h2::after { content: ""; flex-grow: 1; height: 1px; background: var(--card-border); }
+
     .form-group { margin-bottom: 15px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
+    
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { display: block; width: 100%; padding: 16px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 16px; font-weight: 500; background-color: #1a1c23 !important; box-shadow: inset 0 3px 6px rgba(0,0,0,0.4); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-shadow: 0 0 0 #ffffff; caret-color: var(--accent); outline: none; font-family: inherit; transition: all 0.3s ease; -webkit-appearance: none; appearance: none; }
     input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 30px #1a1c23 inset !important; -webkit-text-fill-color: white !important; transition: background-color 5000s ease-in-out 0s; }
     input::placeholder { color: #6b7280 !important; -webkit-text-fill-color: #6b7280 !important; text-shadow: none !important; opacity: 1; }
     input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); }
     input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; cursor: pointer; }
+
     .photo-upload-box { border: 2px dashed var(--card-border); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); position: relative; }
     .photo-upload-box:hover { border-color: var(--accent); background: rgba(250, 204, 21, 0.1); }
     .photo-upload-box input[type="file"] { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer; }
@@ -61,6 +137,7 @@
     .photo-text { font-size: 13px; color: var(--text-muted); font-weight: 500; }
     .photo-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; justify-content: center;}
     .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--card-border); animation: bounceIn 0.3s ease-out;}
+
     .map-card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 16px; border: 1px solid var(--card-border); padding: 18px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .map-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow); }
     .map-icon { background: rgba(250, 204, 21, 0.15); color: var(--accent); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(250, 204, 21, 0.3); }
@@ -69,6 +146,7 @@
     .map-address { font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px; }
     .map-hint { font-size: 12px; color: var(--text-muted); }
     .map-arrow { color: var(--accent); font-size: 24px; font-weight: 300; }
+
     .reviews-section { margin-top: 35px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.4s;}
     .review-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .review-stars { color: var(--accent); font-size: 14px; margin-bottom: 5px; }
@@ -76,10 +154,13 @@
     .review-author { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
     .btn-google-review { display: block; width: 100%; text-align: center; padding: 15px; background: rgba(250, 204, 21, 0.15); backdrop-filter: blur(5px); border: 1px dashed var(--accent); color: var(--accent); text-decoration: none; border-radius: 12px; font-weight: 700; margin-top: 15px; transition: all 0.3s;}
     .btn-google-review:hover { background: var(--accent); color: #000; }
+
     .main-button { display: block; width: 100%; padding: 20px; margin-top: 25px; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); color: #000; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4); animation: pulseGlow 2.5s infinite, fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0s, 0.5s; }
     .main-button:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 25px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.6); }
     .main-button:active { transform: translateY(0) scale(0.98); }
+
     .message-error { color: #ef4444; font-weight: 600; margin-top: 10px; text-align: center; font-size: 14px;}
+
     .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
     .chat-button { width: 60px; height: 60px; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px var(--accent-glow), inset 0 2px 4px rgba(255,255,255,0.4); transition: transform 0.3s; }
     .chat-button:hover { transform: scale(1.1); }
@@ -92,6 +173,7 @@
     .chat-link-btn { display: block; width: 100%; padding: 12px; background: var(--accent); color: #000; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; transition: background 0.2s; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);}
     .chat-link-btn:hover { background: var(--accent-hover); }
     .chat-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 16px; color: var(--text-muted); }
+
     .success-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; }
     .success-modal-overlay.active { display: flex; animation: fadeIn 0.3s ease-out; }
     .success-modal-content { background: #1a1c23; border: 1px solid var(--card-border); padding: 40px 30px; border-radius: 24px; text-align: center; max-width: 90%; width: 350px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); animation: bounceIn 0.5s ease-out; }
@@ -123,7 +205,13 @@
     </a>
   </div>
 
-  <div style="text-align: center;">
+  <!-- ТЕЛЕФОН И СТАТУС -->
+  <div class="top-info-bar">
+    <a href="tel:+380997853336" class="phone-btn">
+      <svg viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.03 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+      +38 (099) 785-33-36
+    </a>
+    
     <div class="status-badge" id="status-badge">
       <div class="dot" id="status-dot"></div>
       <span class="status-text" id="status-text">Перевірка...</span>
@@ -136,8 +224,9 @@
   <div class="form-group">
     <label for="car-model">Вкажіть марку та модель</label>
     <input list="car-models-list" id="car-model" placeholder="Почніть вводити назву..." required>
+    
     <datalist id="car-models-list">
-      <!-- Полный список из 300+ моделей -->
+      <!-- Список из 300+ моделей -->
       <option value="Audi A4"></option><option value="Audi A6"></option><option value="Audi Q7"></option><option value="BMW 3 Series"></option><option value="BMW 5 Series"></option><option value="BMW X5"></option><option value="Mercedes-Benz C-Class"></option><option value="Mercedes-Benz E-Class"></option><option value="Mercedes-Benz GLE"></option><option value="Toyota Camry"></option><option value="Toyota RAV4"></option><option value="Toyota Land Cruiser"></option><option value="Volkswagen Passat"></option><option value="Volkswagen Tiguan"></option><option value="Volkswagen Touareg"></option><option value="Skoda Octavia"></option><option value="Skoda Superb"></option><option value="Skoda Kodiaq"></option><option value="Kia Sportage"></option><option value="Kia Sorento"></option><option value="Kia K5"></option><option value="Kia Carnival"></option><option value="Hyundai Tucson"></option><option value="Hyundai Santa Fe"></option><option value="Hyundai Creta"></option><option value="Nissan Qashqai"></option><option value="Nissan X-Trail"></option><option value="Nissan Juke"></option><option value="Renault Duster"></option><option value="Renault Logan"></option><option value="Ford Focus"></option><option value="Ford Kuga"></option><option value="Mazda CX-5"></option><option value="Mazda 6"></option><option value="Volvo XC60"></option><option value="Volvo XC90"></option><option value="Lexus RX"></option><option value="Lexus LX"></option><option value="Land Rover Range Rover"></option><option value="Land Rover Defender"></option><option value="Tesla Model 3"></option><option value="Tesla Model Y"></option><option value="BYD Song Plus"></option><option value="BYD Seal"></option><option value="Chery Tiggo 4"></option><option value="Chery Tiggo 7"></option><option value="Haval H6"></option><option value="Haval Jolion"></option><option value="Zeekr 001"></option><option value="Zeekr X"></option><option value="Bentley Bentayga"></option><option value="Lamborghini Urus"></option><option value="McLaren 720S"></option><option value="ЗАЗ Lanos"></option><option value="ЗАЗ Sens"></option><option value="Daewoo Lanos"></option>
     </datalist>
   </div>
@@ -188,16 +277,19 @@
 
   <div class="reviews-section">
     <h2>Відгуки клієнтів</h2>
+    
     <div class="review-card">
       <div class="review-stars">⭐⭐⭐⭐⭐</div>
       <div class="review-text">"Зробили хімчистку салону просто неймовірно! Машина як нова, запах супер. Записалися через сайт за 1 хвилину."</div>
       <div class="review-author">Олександр М.</div>
     </div>
+
     <div class="review-card">
       <div class="review-stars">⭐⭐⭐⭐⭐</div>
       <div class="review-text">"Найкраща мойка на Салютній. Завжди привітні, швидко і якісно. Дякую за вашу роботу!"</div>
       <div class="review-author">Марина К.</div>
     </div>
+
     <a href="https://maps.app.goo.gl/AnpHokrvB53TSRQW6" target="_blank" class="btn-google-review">Читати всі відгуки в Google</a>
   </div>
 
@@ -329,7 +421,6 @@
       const rawDate = new Date(dateVal);
       const formattedDate = rawDate.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-      // Поскольку калькулятора нет, отправляем заглушки
       const itemsText = "Послуги не обрані (запис на мийку)";
       const finalPrice = "Уточнюється";
 
