@@ -11,19 +11,12 @@
 
   <style>
     :root {
-      /* Новая премиальная палитра */
-      --bg-color: #15171c; /* Глубокий графит вместо черного */
+      --bg-color: #15171c; 
       --bg-gradient: radial-gradient(circle at 50% 0%, #242730 0%, #15171c 60%);
-      
-      /* Эффект "богатых" карточек (металлический отблеск) */
       --card-bg: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
       --card-border: rgba(255, 255, 255, 0.12);
-      
-      /* Текст */
       --text-main: #ffffff;
-      --text-muted: #9ca3af; /* Серебристый */
-      
-      /* Акценты */
+      --text-muted: #9ca3af; 
       --accent: #facc15;
       --accent-hover: #eab308;
       --accent-glow: rgba(250, 204, 21, 0.25);
@@ -42,29 +35,18 @@
       -webkit-font-smoothing: antialiased;
     }
     
-    /* Анимации */
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 var(--accent-glow); } 70% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); } 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); } }
     @keyframes slideInRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.5); } 60% { opacity: 1; transform: scale(1.05); } 100% { transform: scale(1); } }
 
-    /* Шапка */
     .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; margin-top: 10px; padding: 0 5px;}
-    
     .logo-group { display: flex; align-items: center; gap: 12px; }
     .header-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.1); }
     .header-text h1 { margin: 0; font-size: 20px; color: var(--text-main); font-weight: 800; line-height: 1.1; }
-    /* Вернул SALYTNA_CARWASH */
     .header-text p { margin: 4px 0 0 0; font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
 
-    /* Ссылка на Instagram */
-    .insta-btn { 
-      display: flex; align-items: center; justify-content: center;
-      width: 45px; height: 45px; 
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 50%; color: var(--text-main); transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
+    .insta-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 50%; color: var(--text-main); transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     .insta-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-2px); }
     .insta-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
@@ -73,7 +55,6 @@
     h2 { font-size: 15px; color: var(--text-main); margin-top: 30px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; display: flex; align-items: center; gap: 10px;}
     h2::after { content: ""; flex-grow: 1; height: 1px; background: var(--card-border); }
 
-    /* Поля ввода */
     .form-group { margin-bottom: 15px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
     .form-group:nth-child(2) { animation-delay: 0.1s; }
     .form-group:nth-child(3) { animation-delay: 0.2s; }
@@ -81,7 +62,6 @@
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
     
-    /* Богатые поля ввода (эффект углубления) */
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
       border: 1px solid var(--card-border); border-radius: 12px; font-size: 15px; font-weight: 500;
@@ -93,15 +73,9 @@
     input::placeholder { color: #6b7280; }
     input:focus { border-color: var(--accent); box-shadow: inset 0 3px 6px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow); background: rgba(0, 0, 0, 0.4); }
     
-    /* Иконка календаря/времени ТОЛЬКО для даты и времени */
     input[type="date"]::-webkit-calendar-picker-indicator,
-    input[type="time"]::-webkit-calendar-picker-indicator { 
-      filter: invert(1); 
-      opacity: 0.6; 
-      cursor: pointer; 
-    }
+    input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; cursor: pointer; }
 
-    /* Блок карты */
     .map-card {
       background: var(--card-bg); backdrop-filter: blur(10px);
       border-radius: 16px; border: 1px solid var(--card-border);
@@ -118,7 +92,6 @@
     .map-hint { font-size: 12px; color: var(--text-muted); }
     .map-arrow { color: var(--accent); font-size: 24px; font-weight: 300; }
 
-    /* Блок калькулятора */
     .calc-trigger-box { 
       background: var(--card-bg); backdrop-filter: blur(10px); 
       padding: 25px; border-radius: 16px; border: 1px solid var(--card-border); 
@@ -132,7 +105,6 @@
     .selected-services-summary.active { display: block; animation: slideInRight 0.3s ease-out; }
     .price-main { font-size: 26px; font-weight: 800; color: var(--accent); margin-top: 5px; text-shadow: 0 0 15px var(--accent-glow);}
 
-    /* Главная кнопка */
     .main-button { 
       display: block; width: 100%; padding: 20px; margin-top: 25px; 
       background: linear-gradient(135deg, #facc15 0%, #eab308 100%); 
@@ -148,12 +120,10 @@
     .message-error { color: #ef4444; font-weight: 600; margin-top: 10px; text-align: center; font-size: 14px;}
     .message-success { color: #22c55e; font-weight: 700; margin-top: 10px; text-align: center; animation: bounceIn 0.6s ease-out; }
 
-    /* Модальное окно калькулятора */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; z-index: 1000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; }
     .modal-overlay.active { display: flex; opacity: 1; }
     .modal-content { background: #1a1c23; border: 1px solid var(--card-border); border-bottom: none; width: 100%; max-width: 550px; max-height: 90vh; border-radius: 24px 24px 0 0; padding: 25px 20px; overflow-y: auto; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; box-shadow: 0 -10px 40px rgba(0,0,0,0.6); }
     .modal-overlay.active .modal-content { transform: translateY(0); }
-    
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: -25px; background: #1a1c23; padding: 10px 0; z-index: 10; border-bottom: 1px solid var(--card-border); }
     .modal-title { font-size: 18px; font-weight: 800; color: var(--text-main); margin: 0; text-transform: uppercase; letter-spacing: 1.5px;}
     .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
@@ -193,7 +163,6 @@
     
     .modal-total { font-size: 22px; font-weight: 800; color: var(--text-main); text-align: right; margin-top: 20px; border-top: 1px solid var(--card-border); padding-top: 15px;}
 
-    /* Виджет чата */
     .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
     .chat-button { width: 60px; height: 60px; background: linear-gradient(135deg, #facc15 0%, #eab308 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px var(--accent-glow), inset 0 2px 4px rgba(255,255,255,0.4); transition: transform 0.3s; }
     .chat-button:hover { transform: scale(1.1); }
@@ -206,7 +175,6 @@
     .chat-link-btn { display: block; width: 100%; padding: 12px; background: var(--accent); color: #000; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; transition: background 0.2s; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);}
     .chat-link-btn:hover { background: var(--accent-hover); }
     .chat-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 16px; color: var(--text-muted); }
-    
   </style>
 </head>
 <body>
@@ -216,7 +184,6 @@
       <img src="logo.png" alt="SALYTNA Logo" class="header-logo">
       <div class="header-text">
         <h1>Автомийка на Салютній</h1>
-        <!-- Вернул SALYTNA_CARWASH -->
         <p>SALYTNA_CARWASH</p>
       </div>
     </div>
@@ -230,9 +197,188 @@
   <h2>1. Ваш автомобіль <span style="color:var(--accent)">*</span></h2>
   <div class="form-group">
     <label for="car-model">Вкажіть марку та модель</label>
-    <input list="car-models-list" id="car-model" placeholder="Напр. Volkswagen Passat" required>
+    <input list="car-models-list" id="car-model" placeholder="Почніть вводити назву..." required>
+    
+    <!-- ОГРОМНАЯ БАЗА МАШИН -->
     <datalist id="car-models-list">
-      <option value="Audi A4"></option><option value="Audi A6"></option><option value="Toyota Camry"></option><option value="Toyota RAV4"></option><option value="Toyota Land Cruiser"></option><option value="VW Passat"></option><option value="VW Tiguan"></option><option value="VW Transporter"></option><option value="BMW 3 Series"></option><option value="BMW X5"></option><option value="Skoda Octavia"></option><option value="Skoda Superb"></option><option value="Nissan Qashqai"></option><option value="Hyundai Tucson"></option><option value="Kia Sportage"></option><option value="Mercedes Vito"></option><option value="Ford Mondeo"></option>
+      <!-- Toyota -->
+      <option value="Toyota Camry"></option>
+      <option value="Toyota Corolla"></option>
+      <option value="Toyota RAV4"></option>
+      <option value="Toyota Land Cruiser"></option>
+      <option value="Toyota Land Cruiser Prado"></option>
+      <option value="Toyota Highlander"></option>
+      <option value="Toyota Hilux"></option>
+      <option value="Toyota C-HR"></option>
+      <option value="Toyota Sequoia"></option>
+      <option value="Toyota Avensis"></option>
+      <!-- Volkswagen -->
+      <option value="Volkswagen Passat"></option>
+      <option value="Volkswagen Golf"></option>
+      <option value="Volkswagen Tiguan"></option>
+      <option value="Volkswagen Touareg"></option>
+      <option value="Volkswagen Jetta"></option>
+      <option value="Volkswagen Polo"></option>
+      <option value="Volkswagen Transporter"></option>
+      <option value="Volkswagen Multivan"></option>
+      <option value="Volkswagen Arteon"></option>
+      <option value="Volkswagen Teramont"></option>
+      <!-- BMW -->
+      <option value="BMW 3 Series"></option>
+      <option value="BMW 5 Series"></option>
+      <option value="BMW 7 Series"></option>
+      <option value="BMW X1"></option>
+      <option value="BMW X3"></option>
+      <option value="BMW X5"></option>
+      <option value="BMW X6"></option>
+      <option value="BMW X7"></option>
+      <option value="BMW M3"></option>
+      <option value="BMW M5"></option>
+      <!-- Mercedes-Benz -->
+      <option value="Mercedes-Benz C-Class"></option>
+      <option value="Mercedes-Benz E-Class"></option>
+      <option value="Mercedes-Benz S-Class"></option>
+      <option value="Mercedes-Benz A-Class"></option>
+      <option value="Mercedes-Benz GLA"></option>
+      <option value="Mercedes-Benz GLC"></option>
+      <option value="Mercedes-Benz GLE"></option>
+      <option value="Mercedes-Benz GLS"></option>
+      <option value="Mercedes-Benz Vito"></option>
+      <option value="Mercedes-Benz Sprinter"></option>
+      <option value="Mercedes-Benz V-Class"></option>
+      <!-- Audi -->
+      <option value="Audi A4"></option>
+      <option value="Audi A6"></option>
+      <option value="Audi A8"></option>
+      <option value="Audi A3"></option>
+      <option value="Audi Q3"></option>
+      <option value="Audi Q5"></option>
+      <option value="Audi Q7"></option>
+      <option value="Audi Q8"></option>
+      <option value="Audi e-tron"></option>
+      <!-- Skoda -->
+      <option value="Skoda Octavia"></option>
+      <option value="Skoda Superb"></option>
+      <option value="Skoda Kodiaq"></option>
+      <option value="Skoda Karoq"></option>
+      <option value="Skoda Fabia"></option>
+      <option value="Skoda Rapid"></option>
+      <option value="Skoda Scala"></option>
+      <!-- Renault -->
+      <option value="Renault Megane"></option>
+      <option value="Renault Logan"></option>
+      <option value="Renault Duster"></option>
+      <option value="Renault Kaptur"></option>
+      <option value="Renault Arkana"></option>
+      <option value="Renault Trafic"></option>
+      <option value="Renault Sandero"></option>
+      <!-- Nissan -->
+      <option value="Nissan Qashqai"></option>
+      <option value="Nissan X-Trail"></option>
+      <option value="Nissan Juke"></option>
+      <option value="Nissan Leaf"></option>
+      <option value="Nissan Navara"></option>
+      <option value="Nissan Murano"></option>
+      <!-- Hyundai -->
+      <option value="Hyundai Tucson"></option>
+      <option value="Hyundai Santa Fe"></option>
+      <option value="Hyundai Elantra"></option>
+      <option value="Hyundai Sonata"></option>
+      <option value="Hyundai i30"></option>
+      <option value="Hyundai Creta"></option>
+      <option value="Hyundai Accent"></option>
+      <!-- Kia -->
+      <option value="Kia Sportage"></option>
+      <option value="Kia Sorento"></option>
+      <option value="Kia Rio"></option>
+      <option value="Kia Ceed"></option>
+      <option value="Kia Optima"></option>
+      <option value="Kia Seltos"></option>
+      <option value="Kia K5"></option>
+      <!-- Ford -->
+      <option value="Ford Focus"></option>
+      <option value="Ford Mondeo"></option>
+      <option value="Ford Kuga"></option>
+      <option value="Ford Edge"></option>
+      <option value="Ford Transit"></option>
+      <option value="Ford F-150"></option>
+      <option value="Ford Mustang"></option>
+      <!-- Mazda -->
+      <option value="Mazda 3"></option>
+      <option value="Mazda 6"></option>
+      <option value="Mazda CX-5"></option>
+      <option value="Mazda CX-9"></option>
+      <option value="Mazda CX-30"></option>
+      <!-- Volvo -->
+      <option value="Volvo S60"></option>
+      <option value="Volvo S90"></option>
+      <option value="Volvo XC40"></option>
+      <option value="Volvo XC60"></option>
+      <option value="Volvo XC90"></option>
+      <!-- Lexus -->
+      <option value="Lexus ES"></option>
+      <option value="Lexus RX"></option>
+      <option value="Lexus NX"></option>
+      <option value="Lexus LX"></option>
+      <option value="Lexus GX"></option>
+      <!-- Land Rover -->
+      <option value="Land Rover Discovery"></option>
+      <option value="Land Rover Range Rover"></option>
+      <option value="Land Rover Defender"></option>
+      <option value="Land Rover Freelander"></option>
+      <option value="Land Rover Evoque"></option>
+      <option value="Land Rover Velar"></option>
+      <!-- Honda -->
+      <option value="Honda Civic"></option>
+      <option value="Honda Accord"></option>
+      <option value="Honda CR-V"></option>
+      <option value="Honda Pilot"></option>
+      <!-- Peugeot / Citroen -->
+      <option value="Peugeot 308"></option>
+      <option value="Peugeot 508"></option>
+      <option value="Peugeot 3008"></option>
+      <option value="Peugeot 5008"></option>
+      <option value="Citroen C4"></option>
+      <option value="Citroen C5 Aircross"></option>
+      <option value="Citroen Berlingo"></option>
+      <!-- Tesla -->
+      <option value="Tesla Model 3"></option>
+      <option value="Tesla Model S"></option>
+      <option value="Tesla Model X"></option>
+      <option value="Tesla Model Y"></option>
+      <!-- Mitsubishi / Subaru / Suzuki -->
+      <option value="Mitsubishi Outlander"></option>
+      <option value="Mitsubishi L200"></option>
+      <option value="Mitsubishi Pajero"></option>
+      <option value="Subaru Forester"></option>
+      <option value="Subaru Outback"></option>
+      <option value="Subaru XV"></option>
+      <option value="Suzuki Vitara"></option>
+      <option value="Suzuki SX4"></option>
+      <option value="Suzuki Jimny"></option>
+      <!-- Opel / Dacia -->
+      <option value="Opel Astra"></option>
+      <option value="Opel Insignia"></option>
+      <option value="Opel Mokka"></option>
+      <option value="Dacia Duster"></option>
+      <option value="Dacia Sandero"></option>
+      <option value="Dacia Logan"></option>
+      <!-- Китайские и бюджетные -->
+      <option value="Chery Tiggo 4"></option>
+      <option value="Chery Tiggo 7"></option>
+      <option value="Chery Tiggo 8"></option>
+      <option value="Haval H6"></option>
+      <option value="Haval Jolion"></option>
+      <option value="Geely Coolray"></option>
+      <option value="Geely Atlas"></option>
+      <!-- ЗАЗ / Daewoo / Chevrolet -->
+      <option value="ЗАЗ Sens"></option>
+      <option value="ЗАЗ Lanos"></option>
+      <option value="ЗАЗ Vida"></option>
+      <option value="Daewoo Lanos"></option>
+      <option value="Daewoo Sens"></option>
+      <option value="Chevrolet Aveo"></option>
+      <option value="Chevrolet Lacetti"></option>
     </datalist>
   </div>
 
@@ -608,7 +754,6 @@
 
     renderServices();
 
-    // Логика виджета чата
     const chatButton = document.getElementById('chat-button');
     const chatPopup = document.getElementById('chat-popup');
     const chatClose = document.getElementById('chat-close');
@@ -622,7 +767,6 @@
       chatPopup.classList.remove('active');
     });
 
-    // Логика карты
     document.getElementById('map-route-btn').addEventListener('click', function() {
       window.open('https://maps.app.goo.gl/AnpHokrvB53TSRQW6', '_blank');
     });
