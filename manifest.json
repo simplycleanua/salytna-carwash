@@ -1,0 +1,20 @@
+{
+  "name": "Автомийка на Салютній",
+  "short_name": "Салютна",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#15171c",
+  "theme_color": "#facc15",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
