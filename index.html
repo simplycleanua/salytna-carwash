@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Автомийка на Салютній — Онлайн-запис</title>
   <meta name="theme-color" content="#facc15">
   
@@ -25,6 +25,7 @@
       --accent: #facc15;
       --accent-hover: #eab308;
       --accent-glow: rgba(250, 204, 21, 0.25);
+      --success: #22c55e;
     }
 
     * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
@@ -45,6 +46,10 @@
     @keyframes slideInRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.5); } 60% { opacity: 1; transform: scale(1.05); } 100% { transform: scale(1); } }
     @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+    
+    /* Анимация галочки */
+    @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* Шапка */
     .header-container { animation: fadeInUp 0.6s ease-out forwards; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 10px; padding: 0 5px;}
@@ -64,7 +69,7 @@
       animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s;
     }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
-    .dot.open { background: #22c55e; animation: pulseDot 2s infinite; }
+    .dot.open { background: var(--success); animation: pulseDot 2s infinite; }
     .dot.closed { background: #ef4444; }
     .status-text { color: var(--text-muted); }
     
@@ -80,10 +85,11 @@
     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
     .form-group label span { color: var(--accent); } 
     
-    /* ЖЕСТКИЙ ФИКС ДЛЯ ЦВЕТА ТЕКСТА НА iOS */
+    /* ФИКС ЦВЕТА И РАЗМЕРА ДЛЯ iOS */
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
-      border: 1px solid var(--card-border); border-radius: 12px; font-size: 15px; font-weight: 500;
+      border: 1px solid var(--card-border); border-radius: 12px; 
+      font-size: 16px; font-weight: 500;
       background-color: #1a1c23 !important; 
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.4); 
       color: #ffffff !important; 
@@ -125,9 +131,6 @@
     .photo-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; justify-content: center;}
     .photo-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--card-border); animation: bounceIn 0.3s ease-out;}
 
-    #calendar-btn { display: none; width: 100%; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 12px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.3s;}
-    #calendar-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted);}
-
     /* Карта */
     .map-card { background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid var(--card-border); padding: 18px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1); }
     .map-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2); }
@@ -161,7 +164,6 @@
     .main-button:active { transform: translateY(0) scale(0.98); }
 
     .message-error { color: #ef4444; font-weight: 600; margin-top: 10px; text-align: center; font-size: 14px;}
-    .message-success { color: #22c55e; font-weight: 700; margin-top: 10px; text-align: center; animation: bounceIn 0.6s ease-out; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; z-index: 1000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; }
     .modal-overlay.active { display: flex; opacity: 1; }
@@ -173,7 +175,7 @@
     .close-btn:hover { color: #ef4444; border-color: #ef4444; transform: rotate(90deg); }
     .modal-class-selector { margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px solid var(--card-border); box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);}
     .modal-class-selector label { font-weight: 600; font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 8px; text-transform: uppercase;}
-    select { display: block; width: 100%; padding: 14px; font-size: 15px; border: 1px solid var(--card-border); border-radius: 10px; background: #252830; color: white; -webkit-appearance: menulist; appearance: menulist; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);}
+    select { display: block; width: 100%; padding: 14px; font-size: 16px; border: 1px solid var(--card-border); border-radius: 10px; background: #252830; color: white; -webkit-appearance: menulist; appearance: menulist; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);}
     .category-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
     .category-tabs::-webkit-scrollbar { display: none; }
     .cat-btn { padding: 12px 20px; border: 1px solid var(--card-border); background: rgba(255,255,255,0.03); border-radius: 30px; cursor: pointer; font-size: 13px; color: var(--text-muted); white-space: nowrap; transition: all 0.3s; font-weight: 600; }
@@ -211,6 +213,20 @@
     .chat-link-btn { display: block; width: 100%; padding: 12px; background: var(--accent); color: #000; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; transition: background 0.2s; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);}
     .chat-link-btn:hover { background: var(--accent-hover); }
     .chat-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 16px; color: var(--text-muted); }
+
+    /* МОДАЛЬНОЕ ОКНО УСПЕХА */
+    .success-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; }
+    .success-modal-overlay.active { display: flex; animation: fadeIn 0.3s ease-out; }
+    .success-modal-content { background: #1a1c23; border: 1px solid var(--card-border); padding: 40px 30px; border-radius: 24px; text-align: center; max-width: 90%; width: 350px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); animation: bounceIn 0.5s ease-out; }
+    
+    .check-circle { width: 90px; height: 90px; background: rgba(34, 197, 94, 0.1); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
+    .checkmark { width: 45px; height: 45px; stroke: var(--success); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.6s 0.3s ease-out forwards; }
+    
+    .success-title { font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+    .success-subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 25px; }
+    .btn-close-success { background: var(--accent); color: #000; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; width: 100%;}
+    .btn-close-success:hover { background: var(--accent-hover); }
+
   </style>
 </head>
 <body>
@@ -312,8 +328,6 @@
 
   <button class="main-button" id="submit">Записатися на мийку</button>
   
-  <a href="#" id="calendar-btn" target="_blank">📅 Додати в календар</a>
-  
   <p class="subtitle-center" id="message" style="margin-top:20px; font-size: 11px;">Натискаючи кнопку, ви погоджуєтесь на обробку даних.</p>
 
   <div class="reviews-section">
@@ -381,6 +395,20 @@
     </div>
     <div class="chat-button" id="chat-button">
       <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО УСПЕХА -->
+  <div class="success-modal-overlay" id="success-modal">
+    <div class="success-modal-content">
+      <div class="check-circle">
+        <svg class="checkmark" viewBox="0 0 52 52">
+          <path d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+      <div class="success-title">Дякуємо!</div>
+      <div class="success-subtitle">Заявку успішно прийнято.<br>Адміністратор зв'яжеться з вами найближчим часом для підтвердження.</div>
+      <button class="btn-close-success" onclick="document.getElementById('success-modal').classList.remove('active')">Чудово</button>
     </div>
   </div>
 
@@ -463,7 +491,7 @@
     const modal = document.getElementById('calc-modal');
     const photoInput = document.getElementById('photo-input');
     const photoPreview = document.getElementById('photo-preview');
-    const calendarBtn = document.getElementById('calendar-btn');
+    const successModal = document.getElementById('success-modal');
 
     function updateStatus() {
       const now = new Date();
@@ -728,13 +756,16 @@
 
         const data = await response.json();
         if (data.ok) {
-          messageElement.textContent = 'Заявку відправлено! Адміністратор зв\'яжеться з вами.';
-          messageElement.className = 'message-success';
+          // Скрываем текст, показываем анимацию
+          messageElement.textContent = ''; 
           
-          generateICSFile(dateVal, timeVal, exactModel);
+          // Открываем модалку
+          successModal.classList.add('active');
 
+          // Очищаем форму
           nameInput.value = ''; contactInput.value = ''; dateInput.value = ''; timeInput.value = ''; carModelInput.value = '';
           photoInput.value = ''; photoPreview.innerHTML = ''; selectedPhotos = [];
+          cart = []; renderServices();
           
         } else {
           messageElement.textContent = 'Помилка відправки. Спробуйте пізніше.';
@@ -745,41 +776,6 @@
         messageElement.className = 'message-error';
       }
     });
-
-    // ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ КАЛЕНДАРЯ (Base64 для iOS)
-    function generateICSFile(dateStr, timeStr, carModel) {
-      const startDate = new Date(`${dateStr}T${timeStr}:00`);
-      const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
-      
-      const formatICSDate = (date) => {
-        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-      };
-
-      const icsContent = 
-        "BEGIN:VCALENDAR\r\n" +
-        "VERSION:2.0\r\n" +
-        "PRODID:-//Salytna Carwash//Online Booking//EN\r\n" +
-        "BEGIN:VEVENT\r\n" +
-        "UID:" + Date.now() + "@salytna.com\r\n" +
-        "DTSTAMP:" + formatICSDate(new Date()) + "\r\n" +
-        "DTSTART:" + formatICSDate(startDate) + "\r\n" +
-        "DTEND:" + formatICSDate(endDate) + "\r\n" +
-        "SUMMARY:Мийка авто: " + carModel + "\r\n" +
-        "DESCRIPTION:Ваш запис на автомийці 'Салютна'. Чекаємо на вас!\r\n" +
-        "LOCATION:Київ, вул. Салютна, 5Б\r\n" +
-        "END:VEVENT\r\n" +
-        "END:VCALENDAR";
-
-      const base64Content = btoa(unescape(encodeURIComponent(icsContent)));
-      const dataUri = "data:text/calendar;base64," + base64Content;
-
-      calendarBtn.href = dataUri;
-      calendarBtn.removeAttribute('download'); 
-      calendarBtn.style.display = 'block';
-      calendarBtn.style.cursor = 'pointer';
-      calendarBtn.style.zIndex = '100';
-      calendarBtn.style.position = 'relative';
-    }
 
     renderServices();
 
