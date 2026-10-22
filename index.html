@@ -575,23 +575,12 @@
       chatPopup.classList.remove('active');
     });
 
-    // ==========================================
-    // ЛОГИКА ДЛЯ ПЕРЕХОДА В КАРТЫ (Google/Apple)
+       // ==========================================
+    // ЛОГИКА ДЛЯ ПЕРЕХОДА В GOOGLE КАРТЫ
     // ==========================================
     document.getElementById('map-route-btn').addEventListener('click', function() {
-      const lat = 50.472152;
-      const lng = 30.403964;
-      
-      // Проверяем, является ли устройство iOS (iPhone/iPad/Mac)
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      
-      if (isIOS) {
-        // Открываем Apple Maps (на iPhone/iPad)
-        window.open(`https://maps.apple.com/?daddr=${lat},${lng}`, '_blank');
-      } else {
-        // Открываем Google Maps по твоей короткой ссылке (для Android и ПК)
-        window.open('https://maps.app.goo.gl/AnpHokrvB53TSRQW6', '_blank');
-      }
+      // На всех устройствах открываем Google Maps по твоей ссылке
+      window.open('https://maps.app.goo.gl/AnpHokrvB53TSRQW6', '_blank');
     });
   </script>
 </body>
