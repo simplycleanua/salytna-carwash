@@ -15,7 +15,7 @@
 
   <style>
     :root {
-      color-scheme: dark; /* Говорим iOS, что сайт темный */
+      color-scheme: dark;
       --bg-color: #15171c; 
       --bg-gradient: radial-gradient(circle at 50% 0%, #242730 0%, #15171c 60%);
       --card-bg: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
@@ -84,17 +84,16 @@
     input[type="text"], input[type="tel"], input[type="date"], input[type="time"] { 
       display: block; width: 100%; padding: 16px; 
       border: 1px solid var(--card-border); border-radius: 12px; font-size: 15px; font-weight: 500;
-      background-color: #1a1c23 !important; /* Сплошной темный фон */
+      background-color: #1a1c23 !important; 
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.4); 
       color: #ffffff !important; 
       -webkit-text-fill-color: #ffffff !important; 
-      text-shadow: 0 0 0 #ffffff; /* Хак для Safari, заставляет рендерить белым */
+      text-shadow: 0 0 0 #ffffff;
       caret-color: var(--accent);
       outline: none; font-family: inherit; transition: all 0.3s ease; 
       -webkit-appearance: none; appearance: none;
       opacity: 1;
     }
-    /* Фикс автозаполнения Safari */
     input:-webkit-autofill,
     input:-webkit-autofill:hover, 
     input:-webkit-autofill:focus, 
@@ -747,6 +746,7 @@
       }
     });
 
+    // ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ КАЛЕНДАРЯ (Base64 для iOS)
     function generateICSFile(dateStr, timeStr, carModel) {
       const startDate = new Date(`${dateStr}T${timeStr}:00`);
       const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
@@ -756,26 +756,29 @@
       };
 
       const icsContent = 
-        "BEGIN:VCALENDAR\n" +
-        "VERSION:2.0\n" +
-        "PRODID:-//Salytna Carwash//Online Booking//EN\n" +
-        "BEGIN:VEVENT\n" +
-        "UID:" + Date.now() + "@salytna.com\n" +
-        "DTSTAMP:" + formatICSDate(new Date()) + "\n" +
-        "DTSTART:" + formatICSDate(startDate) + "\n" +
-        "DTEND:" + formatICSDate(endDate) + "\n" +
-        "SUMMARY:Мийка авто: " + carModel + "\n" +
-        "DESCRIPTION:Ваш запис на автомийці 'Салютна'. Чекаємо на вас!\n" +
-        "LOCATION:Київ, вул. Салютна, 5Б\n" +
-        "END:VEVENT\n" +
+        "BEGIN:VCALENDAR\r\n" +
+        "VERSION:2.0\r\n" +
+        "PRODID:-//Salytna Carwash//Online Booking//EN\r\n" +
+        "BEGIN:VEVENT\r\n" +
+        "UID:" + Date.now() + "@salytna.com\r\n" +
+        "DTSTAMP:" + formatICSDate(new Date()) + "\r\n" +
+        "DTSTART:" + formatICSDate(startDate) + "\r\n" +
+        "DTEND:" + formatICSDate(endDate) + "\r\n" +
+        "SUMMARY:Мийка авто: " + carModel + "\r\n" +
+        "DESCRIPTION:Ваш запис на автомийці 'Салютна'. Чекаємо на вас!\r\n" +
+        "LOCATION:Київ, вул. Салютна, 5Б\r\n" +
+        "END:VEVENT\r\n" +
         "END:VCALENDAR";
 
-      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-      const url = window.URL.createObjectURL(blob);
-      
-      calendarBtn.href = url;
-      calendarBtn.download = 'Zapys_Avtomyika.ics';
+      const base64Content = btoa(unescape(encodeURIComponent(icsContent)));
+      const dataUri = "data:text/calendar;base64," + base64Content;
+
+      calendarBtn.href = dataUri;
+      calendarBtn.removeAttribute('download'); 
       calendarBtn.style.display = 'block';
+      calendarBtn.style.cursor = 'pointer';
+      calendarBtn.style.zIndex = '100';
+      calendarBtn.style.position = 'relative';
     }
 
     renderServices();
