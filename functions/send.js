@@ -3,10 +3,9 @@ export async function onRequestPost(context) {
   
   try {
     const contentType = request.headers.get('content-type') || '';
-    let name, contact, price, car, items, date, time;
+    let name, contact, price, car, items, date, time, isUrgent = 'false';
     let photos = [];
 
-    // Если пришел FormData (с фото)
     if (contentType.includes('multipart/form-data')) {
       const formData = await request.formData();
       name = formData.get('name');
@@ -16,12 +15,13 @@ export async function onRequestPost(context) {
       items = formData.get('items');
       date = formData.get('date');
       time = formData.get('time');
-      photos = formData.getAll('photos'); // Массив фото
+      isUrgent = formData.get('isUrgent');
+      photos = formData.getAll('photos');
     } else {
-      // Резервный вариант (JSON)
       const body = await request.json();
       name = body.name; contact = body.contact; price = body.price; 
       car = body.car; items = body.items; date = body.date; time = body.time;
+      isUrgent = body.isUrgent;
     }
 
     const BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
@@ -31,22 +31,46 @@ export async function onRequestPost(context) {
       return new Response(JSON.stringify({ ok: false, error: 'Env vars missing' }), { status: 500 });
     }
 
-    const servicesText = items && items.trim() !== "" ? items : "Послуги не обрані";
-    const text = `🚗 НОВИЙ ЗАПИС\n\n👤 Ім'я: ${name}\n📞 Контакт: ${contact}\n\n📅 Дата: ${date}\n⏰ Час: ${time}\n\n🚘 Авто: ${car}\n🛒 Замовлення:\n${servicesText}\n\n💰 Орієнтовна вартість: ${price}`;
+    // Форматируем контакт, чтобы он был кликабельным в Telegram
+    let contactFormatted = contact;
+    if (contact.startsWith('@')) {
+      contactFormatted = `<a href="https://t.me/${contact.replace('@', '')}">${contact}</a>`;
+    } else if (contact.match(/^\+?\d+$/)) {
+      contactFormatted = `<a href="tel:${contact}">${contact}</a>`;
+    }
 
-    // 1. Отправляем текст
+    const servicesText = items && items.trim() !== "" ? items : "Послуги не обрані (запис на мийку)";
+    
+    // Плашка для срочности
+    const urgentBadge = isUrgent === 'true' ? "\n\n🔥 <b>ТЕРМІНОВА МИЙКА! (+20%)</b> 🔥\n" : "";
+
+    const text = `🚗 <b>НОВИЙ ЗАПИС</b>${urgentBadge}
+👤 Ім'я: <b>${name}</b>
+📞 Контакт: ${contactFormatted}
+
+📅 Дата: <b>${date}</b>
+⏰ Час: <b>${time}</b>
+
+🚘 Авто: <b>${car}</b>
+🛒 Замовлення:
+${servicesText}
+
+💰 Орієнтовна вартість: <b>${price}</b>`;
+
     const urlMsg = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
     await fetch(urlMsg, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+      body: JSON.stringify({ 
+        chat_id: CHAT_ID, 
+        text: text,
+        parse_mode: 'HTML' // Включаем красивый текст
+      })
     });
 
-    // 2. Отправляем фотографии (если есть)
     if (photos && photos.length > 0) {
       for (let i = 0; i < photos.length; i++) {
         const photo = photos[i];
-        // Проверяем, что это действительно файл
         if (photo instanceof File) {
           const formData = new FormData();
           formData.append('chat_id', CHAT_ID);
@@ -54,18 +78,12 @@ export async function onRequestPost(context) {
           formData.append('caption', `Фото до запису (${i + 1}/${photos.length})`);
 
           const urlPhoto = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
-          await fetch(urlPhoto, {
-            method: 'POST',
-            body: formData
-          });
+          await fetch(urlPhoto, { method: 'POST', body: formData });
         }
       }
     }
 
-    return new Response(JSON.stringify({ ok: true }), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     return new Response(JSON.stringify({ ok: false, error: error.message }), { status: 500 });
   }
