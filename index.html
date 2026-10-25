@@ -6,7 +6,6 @@
   <title>Автомийка на Салютній — Онлайн-запис</title>
   <meta name="theme-color" content="#facc15">
   
-  <!-- GOOGLE ANALYTICS (Замени G-XXXXXXXXXX на свой ID позже) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -48,12 +47,8 @@
       position: relative;
     }
 
-    @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    #bg-video { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; opacity: 0.4; pointer-events: none; }
-    video::-webkit-media-controls { display: none !important; }
-    video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
-    video::-webkit-media-controls-panel { display: none !important; }
-    #bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, rgba(15, 17, 21, 0.85) 0%, rgba(30, 35, 45, 0.9) 50%, rgba(15, 17, 21, 0.95) 100%); background-size: 200% 200%; animation: gradientBG 10s ease infinite; z-index: -1; }
+    #sparkles-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; }
+    #bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 50% 0%, rgba(15, 17, 21, 0.7) 0%, rgba(15, 17, 21, 0.95) 100%); z-index: -1; }
     
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 var(--accent-glow); } 70% { box-shadow: 0 0 0 15px rgba(250, 204, 21, 0); } 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); } }
@@ -72,11 +67,21 @@
     .insta-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-2px); }
     .insta-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
-    .top-info-bar { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s; }
-    .phone-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); border: 1px solid var(--card-border); border-radius: 20px; padding: 6px 14px; color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+    /* БЛОК ТЕЛЕФОНА И СТАТУСА */
+    .top-info-bar { 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      gap: 8px; 
+      flex-wrap: wrap; 
+      margin-bottom: 25px; 
+      animation: fadeInUp 0.6s ease-out forwards; opacity: 0; animation-delay: 0.1s;
+    }
+
+    .phone-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); border: 1px solid var(--card-border); border-radius: 20px; padding: 6px 12px; color: var(--text-main); text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.3s; }
     .phone-btn:hover { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); color: var(--accent); }
     .phone-btn svg { width: 14px; height: 14px; fill: currentColor; }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); border: 1px solid var(--card-border); border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); border: 1px solid var(--card-border); border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
     .dot.open { background: var(--success); animation: pulseDot 2s infinite; }
     .dot.closed { background: #ef4444; }
@@ -129,18 +134,11 @@
     .selected-services-summary.active { display: block; animation: slideInRight 0.3s ease-out; }
     .price-main { font-size: 26px; font-weight: 800; color: var(--accent); margin-top: 5px; text-shadow: 0 0 15px var(--accent-glow);}
 
-    /* ТУМБЛЕР СРОЧНОСТИ */
-    .urgent-toggle-box {
-      display: flex; align-items: center; justify-content: space-between;
-      background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2);
-      padding: 15px; border-radius: 12px; margin-top: 20px; cursor: pointer;
-      transition: all 0.3s;
-    }
+    .urgent-toggle-box { display: flex; align-items: center; justify-content: space-between; background: rgba(250, 204, 21, 0.05); border: 1px solid rgba(250, 204, 21, 0.2); padding: 15px; border-radius: 12px; margin-top: 20px; cursor: pointer; transition: all 0.3s; }
     .urgent-toggle-box:hover { background: rgba(250, 204, 21, 0.1); }
     .urgent-toggle-text { flex-grow: 1; padding-right: 15px; }
     .urgent-toggle-text h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--accent); font-weight: 700;}
     .urgent-toggle-text p { margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.3;}
-    
     .switch { position: relative; display: inline-block; width: 50px; height: 28px; flex-shrink: 0; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 34px; border: 1px solid var(--card-border);}
@@ -217,9 +215,7 @@
 </head>
 <body>
 
-  <video autoplay loop muted playsinline webkit-playsinline preload="auto" id="bg-video">
-    <source src="https://assets.codepen.io/6093409/car-wash.mp4" type="video/mp4">
-  </video>
+  <canvas id="sparkles-canvas"></canvas>
   <div id="bg-overlay"></div>
 
   <div class="header-container">
@@ -243,7 +239,7 @@
     
     <div class="status-badge" id="status-badge">
       <div class="dot" id="status-dot"></div>
-      <span class="status-text" id="status-text">Перевірка...</span>
+      <span class="status-text" id="status-text">...</span>
     </div>
   </div>
 
@@ -253,8 +249,87 @@
   <div class="form-group">
     <label for="car-model">Вкажіть марку та модель</label>
     <input list="car-models-list" id="car-model" placeholder="Почніть вводити назву..." required>
+    
+    <!-- БАЗА 300+ АВТО -->
     <datalist id="car-models-list">
-      <option value="Audi A4"></option><option value="Audi A6"></option><option value="Audi Q7"></option><option value="BMW 3 Series"></option><option value="BMW 5 Series"></option><option value="BMW X5"></option><option value="Mercedes-Benz C-Class"></option><option value="Mercedes-Benz E-Class"></option><option value="Mercedes-Benz GLE"></option><option value="Toyota Camry"></option><option value="Toyota RAV4"></option><option value="Toyota Land Cruiser"></option><option value="Volkswagen Passat"></option><option value="Volkswagen Tiguan"></option><option value="Volkswagen Touareg"></option><option value="Skoda Octavia"></option><option value="Skoda Superb"></option><option value="Skoda Kodiaq"></option><option value="Kia Sportage"></option><option value="Kia Sorento"></option><option value="Kia K5"></option><option value="Kia Carnival"></option><option value="Hyundai Tucson"></option><option value="Hyundai Santa Fe"></option><option value="Hyundai Creta"></option><option value="Nissan Qashqai"></option><option value="Nissan X-Trail"></option><option value="Nissan Juke"></option><option value="Renault Duster"></option><option value="Renault Logan"></option><option value="Ford Focus"></option><option value="Ford Kuga"></option><option value="Mazda CX-5"></option><option value="Mazda 6"></option><option value="Volvo XC60"></option><option value="Volvo XC90"></option><option value="Lexus RX"></option><option value="Lexus LX"></option><option value="Land Rover Range Rover"></option><option value="Land Rover Defender"></option><option value="Tesla Model 3"></option><option value="Tesla Model Y"></option><option value="BYD Song Plus"></option><option value="BYD Seal"></option><option value="Chery Tiggo 4"></option><option value="Chery Tiggo 7"></option><option value="Haval H6"></option><option value="Haval Jolion"></option><option value="Zeekr 001"></option><option value="Zeekr X"></option><option value="Bentley Bentayga"></option><option value="Lamborghini Urus"></option><option value="McLaren 720S"></option><option value="ЗАЗ Lanos"></option><option value="ЗАЗ Sens"></option><option value="Daewoo Lanos"></option>
+      <!-- A -->
+      <option value="Audi A1"></option><option value="Audi A3"></option><option value="Audi A4"></option><option value="Audi A5"></option><option value="Audi A6"></option><option value="Audi A7"></option><option value="Audi A8"></option>
+      <option value="Audi Q2"></option><option value="Audi Q3"></option><option value="Audi Q4 e-tron"></option><option value="Audi Q5"></option><option value="Audi Q7"></option><option value="Audi Q8"></option>
+      <option value="Audi e-tron"></option><option value="Audi TT"></option><option value="Audi R8"></option><option value="Audi RS3"></option><option value="Audi RS6"></option>
+      <option value="Aston Martin DBX"></option><option value="Aston Martin Vantage"></option><option value="Aston Martin DB11"></option>
+      <!-- B -->
+      <option value="Bentley Bentayga"></option><option value="Bentley Continental GT"></option><option value="Bentley Flying Spur"></option>
+      <option value="BMW 1 Series"></option><option value="BMW 2 Series"></option><option value="BMW 3 Series"></option><option value="BMW 4 Series"></option><option value="BMW 5 Series"></option><option value="BMW 7 Series"></option><option value="BMW 8 Series"></option>
+      <option value="BMW X1"></option><option value="BMW X2"></option><option value="BMW X3"></option><option value="BMW X4"></option><option value="BMW X5"></option><option value="BMW X6"></option><option value="BMW X7"></option><option value="BMW XM"></option>
+      <option value="BMW M2"></option><option value="BMW M3"></option><option value="BMW M4"></option><option value="BMW M5"></option><option value="BMW i3"></option><option value="BMW i4"></option><option value="BMW iX"></option><option value="BMW iX3"></option><option value="BMW Z4"></option>
+      <option value="BYD Qin Plus"></option><option value="BYD Han"></option><option value="BYD Tang"></option><option value="BYD Song Plus"></option><option value="BYD Yuan Plus"></option><option value="BYD Dolphin"></option><option value="BYD Seal"></option><option value="BYD Seal U"></option><option value="BYD Atto 3"></option>
+      <!-- C -->
+      <option value="Changan CS35"></option><option value="Changan CS55"></option><option value="Changan CS75"></option><option value="Changan UNI-K"></option><option value="Changan UNI-T"></option>
+      <option value="Chery Tiggo 2"></option><option value="Chery Tiggo 4"></option><option value="Chery Tiggo 7"></option><option value="Chery Tiggo 8"></option><option value="Chery Tiggo 9"></option><option value="Chery Arrizo 5"></option><option value="Chery Arrizo 8"></option>
+      <option value="Chevrolet Aveo"></option><option value="Chevrolet Lacetti"></option><option value="Chevrolet Cruze"></option><option value="Chevrolet Camaro"></option><option value="Chevrolet Tahoe"></option>
+      <option value="Citroen C3"></option><option value="Citroen C4"></option><option value="Citroen C5 Aircross"></option><option value="Citroen Berlingo"></option>
+      <option value="Cupra Formentor"></option><option value="Cupra Leon"></option><option value="Cupra Born"></option>
+      <!-- D -->
+      <option value="Dacia Sandero"></option><option value="Dacia Logan"></option><option value="Dacia Duster"></option><option value="Dacia Jogger"></option><option value="Dacia Spring"></option>
+      <option value="Daewoo Lanos"></option><option value="Daewoo Sens"></option><option value="Daewoo Matiz"></option>
+      <!-- E / F -->
+      <option value="Exeed TXL"></option><option value="Exeed VX"></option><option value="Exeed LX"></option>
+      <option value="Ferrari Roma"></option><option value="Ferrari F8"></option><option value="Ferrari 296"></option><option value="Ferrari SF90"></option>
+      <option value="Fiat 500"></option><option value="Fiat Panda"></option><option value="Fiat Tipo"></option><option value="Fiat Ducato"></option>
+      <option value="Ford Fiesta"></option><option value="Ford Focus"></option><option value="Ford Mondeo"></option><option value="Ford Puma"></option><option value="Ford Kuga"></option><option value="Ford Edge"></option><option value="Ford Explorer"></option><option value="Ford Mustang"></option><option value="Ford Ranger"></option><option value="Ford F-150"></option><option value="Ford Transit"></option><option value="Ford Tourneo"></option>
+      <!-- G / H -->
+      <option value="Geely Coolray"></option><option value="Geely Atlas"></option><option value="Geely Atlas Pro"></option><option value="Geely Tugella"></option><option value="Geely Monjaro"></option><option value="Geely Emgrand"></option>
+      <option value="Haval Jolion"></option><option value="Haval H6"></option><option value="Haval Dargo"></option><option value="Haval H9"></option>
+      <option value="Honda Jazz"></option><option value="Honda Civic"></option><option value="Honda Accord"></option><option value="Honda HR-V"></option><option value="Honda CR-V"></option><option value="Honda Pilot"></option><option value="Honda e"></option>
+      <option value="Hyundai i10"></option><option value="Hyundai i20"></option><option value="Hyundai i30"></option><option value="Hyundai Accent"></option><option value="Hyundai Elantra"></option><option value="Hyundai Sonata"></option><option value="Hyundai Bayon"></option><option value="Hyundai Kona"></option><option value="Hyundai Tucson"></option><option value="Hyundai Santa Fe"></option><option value="Hyundai Palisade"></option><option value="Hyundai Staria"></option><option value="Hyundai Ioniq 5"></option><option value="Hyundai Ioniq 6"></option>
+      <!-- I / J / K -->
+      <option value="Infiniti Q30"></option><option value="Infiniti Q50"></option><option value="Infiniti QX50"></option><option value="Infiniti QX60"></option><option value="Infiniti QX80"></option>
+      <option value="Jaguar E-Pace"></option><option value="Jaguar F-Pace"></option><option value="Jaguar I-Pace"></option><option value="Jaguar XF"></option><option value="Jaguar F-Type"></option>
+      <option value="Jeep Renegade"></option><option value="Jeep Compass"></option><option value="Jeep Wrangler"></option><option value="Jeep Grand Cherokee"></option>
+      <option value="Jetour X70"></option><option value="Jetour X90"></option><option value="Jetour Dashing"></option>
+      <option value="Kia Picanto"></option><option value="Kia Rio"></option><option value="Kia Stonic"></option><option value="Kia Ceed"></option><option value="Kia ProCeed"></option><option value="Kia XCeed"></option><option value="Kia Sportage"></option><option value="Kia Sorento"></option><option value="Kia Seltos"></option><option value="Kia K5"></option><option value="Kia Stinger"></option><option value="Kia Carnival"></option><option value="Kia Soul"></option><option value="Kia Niro"></option><option value="Kia EV6"></option><option value="Kia EV9"></option>
+      <!-- L -->
+      <option value="Lamborghini Urus"></option><option value="Lamborghini Huracan"></option><option value="Lamborghini Aventador"></option>
+      <option value="Land Rover Defender"></option><option value="Land Rover Discovery"></option><option value="Land Rover Discovery Sport"></option><option value="Land Rover Range Rover"></option><option value="Land Rover Range Rover Sport"></option><option value="Land Rover Velar"></option><option value="Land Rover Evoque"></option>
+      <option value="Lexus CT"></option><option value="Lexus IS"></option><option value="Lexus ES"></option><option value="Lexus GS"></option><option value="Lexus LS"></option><option value="Lexus UX"></option><option value="Lexus NX"></option><option value="Lexus RX"></option><option value="Lexus GX"></option><option value="Lexus LX"></option><option value="Lexus LM"></option>
+      <option value="Li Auto L7"></option><option value="Li Auto L8"></option><option value="Li Auto L9"></option>
+      <!-- M -->
+      <option value="Maserati Ghibli"></option><option value="Maserati Levante"></option>
+      <option value="Mazda 2"></option><option value="Mazda 3"></option><option value="Mazda 6"></option><option value="Mazda CX-3"></option><option value="Mazda CX-30"></option><option value="Mazda CX-5"></option><option value="Mazda CX-50"></option><option value="Mazda CX-60"></option><option value="Mazda CX-9"></option><option value="Mazda MX-5"></option><option value="Mazda MX-30"></option>
+      <option value="McLaren 720S"></option><option value="McLaren Artura"></option><option value="McLaren GT"></option>
+      <option value="Mercedes-Benz A-Class"></option><option value="Mercedes-Benz C-Class"></option><option value="Mercedes-Benz E-Class"></option><option value="Mercedes-Benz S-Class"></option><option value="Mercedes-Benz CLA"></option><option value="Mercedes-Benz CLS"></option>
+      <option value="Mercedes-Benz GLA"></option><option value="Mercedes-Benz GLB"></option><option value="Mercedes-Benz GLC"></option><option value="Mercedes-Benz GLE"></option><option value="Mercedes-Benz GLS"></option><option value="Mercedes-Benz G-Class"></option>
+      <option value="Mercedes-Benz V-Class"></option><option value="Mercedes-Benz Vito"></option><option value="Mercedes-Benz Sprinter"></option>
+      <option value="Mercedes-Benz AMG GT"></option><option value="Mercedes-Benz EQE"></option><option value="Mercedes-Benz EQS"></option><option value="Mercedes-Benz EQB"></option><option value="Mercedes-Benz EQC"></option>
+      <option value="MG ZS"></option><option value="MG HS"></option><option value="MG4"></option><option value="MG5"></option>
+      <option value="Mini Cooper"></option><option value="Mini Countryman"></option><option value="Mini Clubman"></option>
+      <option value="Mitsubishi Space Star"></option><option value="Mitsubishi ASX"></option><option value="Mitsubishi Eclipse Cross"></option><option value="Mitsubishi Outlander"></option><option value="Mitsubishi Pajero"></option><option value="Mitsubishi L200"></option>
+      <!-- N / O -->
+      <option value="NIO ES6"></option><option value="NIO ES8"></option><option value="NIO ET7"></option>
+      <option value="Nissan Micra"></option><option value="Nissan Note"></option><option value="Nissan Juke"></option><option value="Nissan Qashqai"></option><option value="Nissan X-Trail"></option><option value="Nissan Murano"></option><option value="Nissan Pathfinder"></option><option value="Nissan Ariya"></option><option value="Nissan Leaf"></option><option value="Nissan Navara"></option><option value="Nissan Terrano"></option>
+      <option value="Omoda C5"></option><option value="Omoda S5"></option>
+      <option value="Opel Corsa"></option><option value="Opel Astra"></option><option value="Opel Insignia"></option><option value="Opel Mokka"></option><option value="Opel Grandland"></option>
+      <!-- P -->
+      <option value="Peugeot 208"></option><option value="Peugeot 308"></option><option value="Peugeot 508"></option><option value="Peugeot 2008"></option><option value="Peugeot 3008"></option><option value="Peugeot 5008"></option><option value="Peugeot Rifter"></option>
+      <option value="Porsche 718 Cayman"></option><option value="Porsche 718 Boxster"></option><option value="Porsche 911"></option><option value="Porsche Panamera"></option><option value="Porsche Macan"></option><option value="Porsche Cayenne"></option><option value="Porsche Taycan"></option>
+      <!-- R / S -->
+      <option value="Renault Twingo"></option><option value="Renault Clio"></option><option value="Renault Captur"></option><option value="Renault Megane"></option><option value="Renault Arkana"></option><option value="Renault Duster"></option><option value="Renault Kaptur"></option><option value="Renault Kadjar"></option><option value="Renault Koleos"></option><option value="Renault Espace"></option><option value="Renault Scenic"></option><option value="Renault Trafic"></option><option value="Renault Master"></option>
+      <option value="Rolls-Royce Cullinan"></option><option value="Rolls-Royce Ghost"></option><option value="Rolls-Royce Phantom"></option>
+      <option value="Seat Ibiza"></option><option value="Seat Leon"></option><option value="Seat Arona"></option><option value="Seat Ateca"></option><option value="Seat Tarraco"></option>
+      <option value="Skoda Fabia"></option><option value="Skoda Scala"></option><option value="Skoda Octavia"></option><option value="Skoda Superb"></option><option value="Skoda Kamiq"></option><option value="Skoda Karoq"></option><option value="Skoda Kodiaq"></option><option value="Skoda Enyaq"></option>
+      <option value="Subaru Impreza"></option><option value="Subaru XV"></option><option value="Subaru Forester"></option><option value="Subaru Outback"></option><option value="Subaru BRZ"></option><option value="Subaru WRX"></option><option value="Subaru Levorg"></option>
+      <option value="Suzuki Ignis"></option><option value="Suzuki Swift"></option><option value="Suzuki Vitara"></option><option value="Suzuki SX4 S-Cross"></option><option value="Suzuki Jimny"></option><option value="Suzuki Swace"></option>
+      <!-- T / V / Z -->
+      <option value="Tank 300"></option><option value="Tank 500"></option>
+      <option value="Tesla Model S"></option><option value="Tesla Model 3"></option><option value="Tesla Model X"></option><option value="Tesla Model Y"></option>
+      <option value="Toyota Aygo"></option><option value="Toyota Yaris"></option><option value="Toyota Corolla"></option><option value="Toyota Camry"></option><option value="Toyota Avalon"></option><option value="Toyota C-HR"></option><option value="Toyota RAV4"></option><option value="Toyota Highlander"></option><option value="Toyota Land Cruiser"></option><option value="Toyota Land Cruiser Prado"></option><option value="Toyota Sequoia"></option><option value="Toyota Hilux"></option><option value="Toyota Proace"></option><option value="Toyota Supra"></option><option value="Toyota GR86"></option><option value="Toyota Prius"></option><option value="Toyota bZ4X"></option>
+      <option value="Volkswagen Polo"></option><option value="Volkswagen Golf"></option><option value="Volkswagen Jetta"></option><option value="Volkswagen Passat"></option><option value="Volkswagen Arteon"></option><option value="Volkswagen T-Roc"></option><option value="Volkswagen T-Cross"></option><option value="Volkswagen Tiguan"></option><option value="Volkswagen Touareg"></option><option value="Volkswagen Teramont"></option><option value="Volkswagen Touran"></option><option value="Volkswagen Sharan"></option><option value="Volkswagen Transporter"></option><option value="Volkswagen Multivan"></option><option value="Volkswagen Amarok"></option><option value="Volkswagen ID.3"></option><option value="Volkswagen ID.4"></option><option value="Volkswagen ID.5"></option><option value="Volkswagen ID.6"></option><option value="Volkswagen ID.Buzz"></option>
+      <option value="Volvo S60"></option><option value="Volvo S90"></option><option value="Volvo V60"></option><option value="Volvo V90"></option><option value="Volvo XC40"></option><option value="Volvo XC60"></option><option value="Volvo XC90"></option><option value="Volvo EX30"></option><option value="Volvo EX90"></option><option value="Volvo C40"></option>
+      <option value="Zeekr 001"></option><option value="Zeekr X"></option><option value="Zeekr 009"></option>
+      <!-- Бюджетные / Классика -->
+      <option value="Daewoo Lanos"></option><option value="Daewoo Sens"></option><option value="Daewoo Matiz"></option>
+      <option value="ЗАЗ Sens"></option><option value="ЗАЗ Lanos"></option><option value="ЗАЗ Vida"></option><option value="ЗАЗ Forza"></option>
+      <option value="Lada Niva"></option><option value="Lada Vesta"></option><option value="Lada Granta"></option><option value="Lada Priora"></option>
     </datalist>
   </div>
 
@@ -309,7 +384,6 @@
     </div>
   </div>
 
-  <!-- ТУМБЛЕР СРОЧНОСТИ -->
   <label class="urgent-toggle-box" for="urgent-checkbox">
     <div class="urgent-toggle-text">
       <h4>🔥 Термінова мийка</h4>
@@ -412,15 +486,68 @@
   </div>
 
   <script>
-    // --- СКРИПТ ДЛЯ ПРИНУДИТЕЛЬНОГО ЗАПУСКА ВИДЕО ---
-    document.addEventListener("DOMContentLoaded", function() {
-      var video = document.getElementById("bg-video");
-      var playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.then(_ => {}).catch(error => { video.style.display = 'none'; });
-      }
+    const canvas = document.getElementById('sparkles-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
 
-      // АВТОЗАПОЛНЕНИЕ ДАННЫХ КЛИЕНТА
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedY = Math.random() * 1 + 0.2;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.8 + 0.2;
+        this.color = Math.random() > 0.5 ? '#facc15' : '#ffffff';
+      }
+      update() {
+        this.y -= this.speedY;
+        this.x += this.speedX;
+        if (this.y < 0) {
+          this.y = height;
+          this.x = Math.random() * width;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.opacity;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = window.innerWidth < 600 ? 40 : 100;
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    initParticles();
+    animate();
+
+
+    document.addEventListener("DOMContentLoaded", function() {
       const savedName = localStorage.getItem('salytna_name');
       const savedContact = localStorage.getItem('salytna_contact');
       if (savedName && savedContact) {
@@ -516,12 +643,14 @@
       const hour = now.getHours();
       const dot = document.getElementById('status-dot');
       const text = document.getElementById('status-text');
+      
+      // Укороченный текст
       if (hour >= 9 && hour < 21) {
         dot.className = 'dot open';
-        text.textContent = 'Відчинено до 21:00';
+        text.textContent = 'Відчинено';
       } else {
         dot.className = 'dot closed';
-        text.textContent = 'Зачинено (працюємо з 9:00)';
+        text.textContent = 'Зачинено';
       }
     }
     updateStatus();
@@ -623,7 +752,6 @@
         cartContainer.appendChild(el);
       });
 
-      // Пересчитываем итоговую сумму с учетом срочности
       let finalTotal = total;
       if (urgentCheckbox.checked) {
         finalTotal = Math.round(total * 1.2);
@@ -718,10 +846,9 @@
       });
     });
 
-    // ОБРАБОТЧИК СРОЧНОСТИ
     urgentCheckbox.addEventListener('change', () => {
       isUrgent = urgentCheckbox.checked;
-      updateCartUI(); // Пересчитываем цену
+      updateCartUI();
     });
 
     submitButton.addEventListener('click', async function() {
@@ -747,7 +874,6 @@
       
       const finalPrice = mainTotal.textContent;
 
-      // СОХРАНЯЕМ ДАННЫЕ В LOCALSTORAGE ДЛЯ АВТОЗАПОЛНЕНИЯ
       localStorage.setItem('salytna_name', name);
       localStorage.setItem('salytna_contact', contact);
 
@@ -759,7 +885,7 @@
       formData.append('items', itemsText);
       formData.append('date', formattedDate);
       formData.append('time', timeVal);
-      formData.append('isUrgent', isUrgent); // Передаем статус срочности
+      formData.append('isUrgent', isUrgent);
 
       for (let i = 0; i < selectedPhotos.length; i++) {
         const res = await fetch(selectedPhotos[i]);
